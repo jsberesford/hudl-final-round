@@ -1,0 +1,43 @@
+/* Festival components — adapted from hacklanta-ii@4643f46 galaxy.module.css,
+   credential.module.css, landing.module.css. Namespaced .fz-*. */
+
+.w-festival { --ink: var(--fz-paper); --muted: var(--fz-muted); --accent: var(--fz-lime); --line: rgba(255,255,255,.14); --panel: rgba(8,8,12,.86); color: var(--fz-paper); font-family: var(--fz-body); }
+.w-festival .sc-title { font: 600 92px/.86 var(--fz-display); letter-spacing: .005em; text-transform: none; }
+.w-festival .sc-take { font: 400 24px/1.35 var(--fz-body); color: var(--fz-muted); }
+.w-festival .k { font: 700 .6em/1 var(--fz-body); letter-spacing: .14em; text-transform: uppercase; color: var(--fz-lime); margin-right: .6em; vertical-align: .2em; }
+.w-festival h3 { font: 600 36px/1 var(--fz-display); margin: 0; }
+
+.fz-label { display: inline-flex; align-items: center; gap: 12px; font: 700 13px/1 var(--fz-body); letter-spacing: .2em; text-transform: uppercase; color: var(--fz-muted); }
+.fz-label-n { font: 600 30px/1 var(--fz-display); letter-spacing: 0; padding: 4px 10px 0; border-radius: 999px; color: var(--fz-ink); background: linear-gradient(90deg, var(--fz-cyan), var(--fz-lime) 50%, var(--fz-orange)); }
+
+.fz-sticker { position: absolute; pointer-events: none; user-select: none; }
+
+/* the pass */
+.fz-pass-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+.fz-strap { width: 46px; height: 120px; background: #0e0e10; border-left: 1px dashed rgba(255,255,255,.12); border-right: 1px dashed rgba(255,255,255,.12); overflow: hidden; display: flex; justify-content: center; }
+.fz-strap span { writing-mode: vertical-rl; font: 700 14px/46px var(--fz-body); letter-spacing: .1em; color: #fff; white-space: nowrap; }
+.fz-pass {
+  position: relative; width: 400px; aspect-ratio: 545/760; border-radius: 34px; overflow: hidden;
+  background: linear-gradient(172deg, #111113, #060607 55%, #0c0c0e);
+  box-shadow: 0 2.5rem 6rem rgba(0,0,0,.78), 0 0 0 1px rgba(255,255,255,.04) inset;
+}
+.fz-pass::after {
+  content: ""; position: absolute; inset: 0; padding: 2px; border-radius: inherit; pointer-events: none; z-index: 2;
+  background: conic-gradient(from 200deg, #2d7ff0, #21e6d7, #8cc63e, #f6ce28, #ff7a1a, #ff316f, #9b6ee8, #2d7ff0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+}
+.fz-pass-slot { position: absolute; z-index: 3; top: 18px; left: 50%; width: 76px; height: 12px; border-radius: 999px; background: #030304; box-shadow: inset 0 3px 6px rgba(0,0,0,.95), 0 1px 0 rgba(255,255,255,.07); transform: translateX(-50%); }
+.fz-pass-prong { position: absolute; z-index: 4; top: -6px; left: 50%; width: 32px; height: 30px; border-radius: 0 0 8px 8px; background: linear-gradient(180deg, #4b4b52, #2c2c31 55%, #141417); transform: translateX(-50%); }
+
+.fz-face { position: absolute; inset: 0; padding: 50px 30px 30px; display: flex; flex-direction: column; }
+.fz-face-top { font: 700 11px/1 var(--fz-body); letter-spacing: .12em; color: var(--fz-lime); }
+.fz-face-logo { width: 78%; margin: 22px auto 0; display: block; }
+.fz-face-dashes { display: flex; justify-content: center; gap: 6px; margin: 22px 0; }
+.fz-face-dashes i { width: 18px; height: 4px; border-radius: 2px; background: var(--fz-cyan); }
+.fz-face-dashes i:nth-child(2) { background: var(--fz-lime); } .fz-face-dashes i:nth-child(3) { background: var(--fz-orange); }
+.fz-face-dashes i:nth-child(4) { background: var(--fz-pink); } .fz-face-dashes i:nth-child(5) { background: #9b6ee8; }
+.fz-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: auto 0 0; }
+.fz-tiles div { border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); background: color-mix(in srgb, var(--c) 9%, #08080a); border-radius: 12px; padding: 10px 12px; }
+.fz-tiles dt { font: 700 10px/1 var(--fz-body); letter-spacing: .12em; text-transform: uppercase; color: var(--c); }
+.fz-tiles dd { margin: 6px 0 0; font: 600 20px/1 var(--fz-body); color: #fff; }

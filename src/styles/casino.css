@@ -1,0 +1,45 @@
+/* Casino components — adapted from hacklanta-v0@48438c5 Hero.astro / TrackGrid.astro.
+   Namespaced .cz-* so they coexist with the festival layer. */
+
+.w-casino { --ink: var(--cz-white); --muted: var(--cz-gray); --accent: var(--cz-red-bright); --line: var(--cz-border-light); --panel: rgba(31,14,19,.78); color: var(--cz-white); font-family: var(--cz-body); }
+
+/* poker chip */
+.cz-chip { --chip-size: 80px; --chip-color: #b22234; --chip-color-dark: #8a1a28; --chip-stripe: #e8dcc8; width: var(--chip-size); height: var(--chip-size); border-radius: 50%; position: relative; filter: drop-shadow(0 6px 12px rgba(0,0,0,.7)); }
+.cz-chip--gold { --chip-color: #b8942a; --chip-color-dark: #8a6e1e; --chip-stripe: #f0e8d8; }
+.cz-chip--dark { --chip-color: #2a1218; --chip-color-dark: #1a0a0e; --chip-stripe: #584048; }
+.cz-chip-base { position: absolute; inset: 0; border-radius: 50%; background: var(--chip-color); overflow: hidden; border: 2px solid var(--chip-color-dark); box-shadow: inset 0 2px 3px rgba(255,255,255,.12), inset 0 -2px 3px rgba(0,0,0,.25); }
+.cz-chip-stripe { position: absolute; width: 22%; height: 100%; left: 50%; top: 0; margin-left: -11%; }
+.cz-chip-stripe::before, .cz-chip-stripe::after { content: ""; position: absolute; left: 0; width: 100%; height: 18%; background: var(--chip-stripe); }
+.cz-chip-stripe::before { top: 0; }
+.cz-chip-stripe::after { bottom: 0; }
+.cz-chip-infield { position: absolute; inset: 16%; border-radius: 50%; background: var(--chip-color); box-shadow: 0 0 0 2px var(--chip-color-dark), inset 0 1px 2px rgba(255,255,255,.08); z-index: 1; }
+.cz-chip-ring { position: absolute; inset: 8%; border-radius: 50%; border: 2px solid var(--chip-color-dark); }
+
+/* playing cards */
+.cz-card { --w: 130px; width: var(--w); aspect-ratio: 5/7; border-radius: 8px; position: relative; filter: drop-shadow(0 6px 16px rgba(0,0,0,.7)); }
+.cz-card--back { background: #4e0e16; border: 2px solid #9a8e78; box-shadow: inset 0 0 0 1px rgba(0,0,0,.4); }
+.cz-card-back-inner { position: absolute; inset: 4px; border: 1px solid rgba(154,142,120,.25); border-radius: 3px;
+  background: repeating-linear-gradient(45deg, transparent 0 3px, rgba(154,142,120,.08) 3px 4px), repeating-linear-gradient(-45deg, transparent 0 3px, rgba(154,142,120,.08) 3px 4px); }
+.cz-card--front { background: #b0a890; border: 1px solid #8a8270; color: #111; }
+.cz-card--front.is-red { color: #4e0e16; }
+.cz-card-corner { position: absolute; left: 10px; top: 8px; display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.cz-card-corner b { font: 700 24px/1 var(--cz-serif); }
+.cz-card-corner i { font-style: normal; font-size: 20px; }
+.cz-card-corner--br { left: auto; top: auto; right: 10px; bottom: 8px; transform: rotate(180deg); }
+
+/* [01] // LABEL */
+.cz-label { display: flex; align-items: center; gap: 12px; font: 500 13px/1 var(--cz-mono); letter-spacing: .3em; text-transform: uppercase; color: var(--cz-gray); }
+.cz-label-n { color: rgba(196,30,58,.9); }
+.cz-label-rule { width: 48px; height: 1px; background: linear-gradient(90deg, transparent, var(--cz-border-light)); }
+.cz-label-rule--r { transform: scaleX(-1); }
+.cz-suits { display: flex; gap: 14px; font-size: 22px; color: rgba(255,255,255,.2); }
+.cz-suits .r { color: rgba(196,30,58,.45); }
+@keyframes blink { 50% { opacity: 0; } }
+.cz-blink { animation: blink 1.1s steps(1) infinite; }
+.deck.reduced .cz-blink { animation: none; }
+
+/* casino scene chrome */
+.w-casino .sc-title { font: italic 400 76px/.95 var(--cz-serif); letter-spacing: -.01em; color: var(--cz-white); }
+.w-casino .sc-take { font: 400 24px/1.35 var(--cz-body); color: var(--cz-gray); }
+.w-casino .k { font: 500 .62em/1 var(--cz-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--cz-red-bright); margin-right: .6em; vertical-align: .2em; }
+.w-casino h3 { font: italic 400 34px/1 var(--cz-serif); margin: 0; }
