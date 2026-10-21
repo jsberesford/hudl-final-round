@@ -67,19 +67,39 @@ export function ScrollDeck() {
 
   const glide = (id: string, immediate = false) => {
     const y = yFor(id);
-    if (lenis.current) lenis.current.scrollTo(y, immediate ? { immediate: true, force: true } : { duration: 1.6, easing: ease });
+    if (lenis.current) lenis.current.scrollTo(y, immediate ? { immediate: true, force: true } : { duration: 0.75, easing: ease, lock: true });
     else scrollTo(0, y);
   };
 
   // Lenis smooth scrolling + the frame loop that paints scenes from scroll.
   useEffect(() => {
-    const l = reduced ? null : new Lenis({ lerp: 0.075, wheelMultiplier: 0.8, smoothWheel: true });
+    const l = reduced ? null : new Lenis({ lerp: 0.12, wheelMultiplier: 0.9, smoothWheel: true });
     lenis.current = l;
     let raf = 0;
     let lastCurrent = "";
 
+    // Cache DOM handles and last-written values so a frame only touches what changed.
+    const r = root.current!;
+    const q = <T extends HTMLElement>(sel: string) => r.querySelector<T>(sel);
+    const bdCasino = q(".bd-casino");
+    const bdFestival = q(".bd-festival");
+    const wipe = q(".fz-wipe");
+    const wipeInner = q(".fz-wipe-inner");
+    const bar = q(".sx-progress");
+    const hint = q(".sx-hint");
+    const turnLayer = layers.current.get(TURN_ID);
+    const last = new Map<string, string>();
+    const write = (key: string, v: string, apply: () => void) => {
+      if (last.get(key) === v) return;
+      last.set(key, v);
+      apply();
+    };
+    let lastS = -1;
+
     const paint = () => {
       const s = (l ? l.animatedScroll : scrollY) / unitPx();
+      if (Math.abs(s - lastS) < 0.0004) return;
+      lastS = s;
       sRef.current = s;
       let best = segs[0].id;
       let bestOp = -1;
@@ -89,38 +109,58 @@ export function ScrollDeck() {
         const prev = segs[k - 1];
         const enter = k === 0 ? 1 : clamp((s - (prev.start + prev.len - TRANSITION)) / TRANSITION);
         const exit = k === segs.length - 1 ? 0 : clamp((s - (seg.start + seg.len - TRANSITION)) / TRANSITION);
-        const e = ease(enter);
-        const x = ease(exit);
         // sequential, not a double exposure: out first, a beat of backdrop, then in
         const op = clamp(enter * 1.9 - 0.9) * clamp(1 - exit * 1.9);
         if (op <= 0.001) {
-          if (el.style.visibility !== "hidden") el.style.visibility = "hidden";
+          write(`${seg.id}:d`, "none", () => (el.style.display = "none"));
           return;
         }
-        el.style.visibility = "visible";
-        el.style.opacity = op.toFixed(3);
-        const y = (1 - e) * 90 - x * 90;
-        const sc = 1 - (1 - e) * 0.04 + x * 0.03;
-        el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0) scale(${sc.toFixed(4)})`;
-        el.style.setProperty("--e", ease(clamp(enter * 1.9 - 0.9)).toFixed(3));
+        write(`${seg.id}:d`, "block", () => (el.style.display = "block"));
+        const e = ease(enter);
+        const x = ease(exit);
+        const o = op.toFixed(3);
+        write(`${seg.id}:o`, o, () => (el.style.opacity = o));
+        const t = `translate3d(0,${((1 - e) * 60 - x * 60).toFixed(1)}px,0) scale(${(1 - (1 - e) * 0.03 + x * 0.02).toFixed(4)})`;
+        write(`${seg.id}:t`, t, () => (el.style.transform = t));
+        const ev = ease(clamp(enter * 1.9 - 0.9)).toFixed(2);
+        write(`${seg.id}:e`, ev, () => el.style.setProperty("--e", ev));
         if (op > bestOp) {
           bestOp = op;
           best = seg.id;
         }
       });
 
-      // The turn: world change + card flip, scrubbed.
+      // The turn: world change + card flip, scrubbed. Vars live on the turn layer only.
       const p = clamp((s - turnSeg.start) / (turnSeg.len - TRANSITION - 0.1));
-      const r = root.current!;
-      const set = (k: string, v: number) => r.style.setProperty(k, v.toFixed(3));
       const before = s < turnSeg.start - TRANSITION;
-      set("--mix", before ? 0 : ease(clamp((p - 0.02) / 0.4)));
-      set("--flip", ease(clamp((p - 0.12) / 0.42)));
-      set("--strap", ease(clamp((p - 0.5) / 0.15)));
-      set("--draw", ease(clamp((p - 0.18) / 0.5)));
-      set("--copy", ease(clamp((p - 0.62) / 0.22)));
-      set("--progress", clamp(s / TOTAL));
-      set("--s", s);
+      const mix = before ? 0 : ease(clamp((p - 0.02) / 0.4));
+      const draw = ease(clamp((p - 0.18) / 0.5));
+      const m = mix.toFixed(3);
+      write("mix", m, () => {
+        if (bdCasino) bdCasino.style.opacity = (1 - mix).toFixed(3);
+        if (bdFestival) bdFestival.style.opacity = m;
+      });
+      const d = draw.toFixed(3);
+      write("draw", d, () => {
+        if (wipe) wipe.style.transform = `translate3d(${(-(1 - draw) * 100).toFixed(2)}%,0,0)`;
+        if (wipeInner) wipeInner.style.transform = `translate3d(${((1 - draw) * 100).toFixed(2)}%,0,0)`;
+      });
+      if (turnLayer && turnLayer.style.display !== "none") {
+        const vars: [string, number][] = [
+          ["--mix", mix],
+          ["--flip", ease(clamp((p - 0.12) / 0.42))],
+          ["--strap", ease(clamp((p - 0.5) / 0.15))],
+          ["--copy", ease(clamp((p - 0.62) / 0.22))],
+        ];
+        for (const [k2, v] of vars) {
+          const vs = v.toFixed(3);
+          write(`turn${k2}`, vs, () => turnLayer.style.setProperty(k2, vs));
+        }
+      }
+      const pr = clamp(s / TOTAL).toFixed(4);
+      write("bar", pr, () => bar && (bar.style.transform = `scaleX(${pr})`));
+      const h = clamp(1 - s * 4).toFixed(2);
+      write("hint", h, () => hint && (hint.style.opacity = h));
 
       if (best !== lastCurrent) {
         lastCurrent = best;

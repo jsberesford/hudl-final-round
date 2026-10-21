@@ -60,7 +60,13 @@ export function FestivalBackdrop() {
   return (
     <div className="bd bd-festival" aria-hidden="true">
       <div className="bd-stars" />
-      <Ribbons />
+      {/* wipe = two counter-translated wrappers: a reveal done purely with transforms */}
+      <div className="fz-wipe">
+        <div className="fz-wipe-inner">
+          <Ribbons />
+        </div>
+        <div className="fz-wipe-edge" />
+      </div>
       <div className="bd-festival-shade" />
     </div>
   );

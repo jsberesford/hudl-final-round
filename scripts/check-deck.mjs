@@ -19,7 +19,7 @@ const wait = (p, ms) => p.waitForTimeout(ms);
 
 // 1. forward step into the turn plays it; capture mid-states
 let p = await page();
-await p.goto(`${base}/#/results-i`); await wait(p, 1800);
+await p.goto(`${base}/?view=deck#/results-i`); await wait(p, 1800);
 await p.keyboard.press("ArrowRight");
 ok((await hash(p)) === "#/turn", "→ from scene 7 lands on #/turn");
 ok((await attr(p, "data-turn")) === "play", "turn plays on forward step");
@@ -45,7 +45,7 @@ ok(p.errs.length === 0, `no console errors (${p.errs.join(" | ")})`);
 
 // 4. skip mid-transition lands on a valid final frame
 p = await page();
-await p.goto(`${base}/#/results-i`); await wait(p, 1800);
+await p.goto(`${base}/?view=deck#/results-i`); await wait(p, 1800);
 await p.keyboard.press("ArrowRight"); await wait(p, 900);
 await p.keyboard.press("s"); await wait(p, 700);
 ok((await attr(p, "data-turn")) === "idle", "S skips the turn");
@@ -55,7 +55,7 @@ ok(flip !== "none", `skipped turn shows the pass (transform ${flip.slice(0, 30)}
 
 // 5. deep link + refresh straight into the turn
 p = await page();
-await p.goto(`${base}/#/turn`); await wait(p, 200);
+await p.goto(`${base}/?view=deck#/turn`); await wait(p, 200);
 ok((await attr(p, "data-turn")) === "idle" && (await attr(p, "data-world")) === "festival", "deep link to #/turn is final state, no cinematic");
 await p.reload(); await wait(p, 200);
 ok((await hash(p)) === "#/turn", "refresh keeps the scene");
@@ -80,7 +80,7 @@ ok((await hash(p)) === "#/delivery", "trackpad/wheel does not navigate");
 
 // 7. reduced motion (OS preference)
 p = await page({ reducedMotion: "reduce" });
-await p.goto(`${base}/#/results-i`); await wait(p, 300);
+await p.goto(`${base}/?view=deck#/results-i`); await wait(p, 300);
 await p.keyboard.press("ArrowRight"); await wait(p, 100);
 ok((await attr(p, "data-turn")) === "idle", "reduced motion: no cinematic");
 ok(await p.$eval(".deck", (el) => el.classList.contains("reduced")), "reduced class applied from OS setting");
@@ -89,7 +89,7 @@ await wait(p, 400); await p.screenshot({ path: `${out}/turn-reduced.png` });
 // 8. viewports
 for (const [w, h, id] of [[1366, 768, "research"], [1366, 768, "changes"], [1920, 1080, "outcome"], [1280, 600, "prioritization"]]) {
   p = await page({ viewport: { width: w, height: h } });
-  await p.goto(`${base}/#/${id}`); await wait(p, 2000);
+  await p.goto(`${base}/?view=deck#/${id}`); await wait(p, 2000);
   await p.screenshot({ path: `${out}/vp-${w}x${h}-${id}.png` });
 }
 

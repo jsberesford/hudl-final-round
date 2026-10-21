@@ -82,74 +82,35 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
       return (
         <>
           <Head scene={scene} n={n} />
-          <p className="jr-user rv" style={i(2)}>
-            <span className="k">// primary user</span> <ClaimText claim={scene.user} />
-          </p>
           <ol className="jr-steps">
             {scene.steps.map((s, k) => (
-              <li key={s.label} className={`jr-step rv ${s.friction ? "is-friction" : ""}`} style={i(3 + k * 0.6)}>
+              <li key={s.label} className={`jr-step rv ${s.friction ? "is-friction" : ""}`} style={i(2 + k * 0.5)}>
                 <span className="jr-n">{String(k + 1).padStart(2, "0")}</span>
                 <b>{s.label}</b>
-                <span className="jr-d">{s.detail}</span>
-                {s.friction && (
-                  <span className="jr-f">
-                    <span className="jr-f-tag">♦ friction</span>
-                    <ClaimText claim={s.friction} tag />
-                  </span>
-                )}
+                {s.friction && <span className="jr-f-tag">♦ friction</span>}
               </li>
             ))}
           </ol>
-          <div className="jr-foot rv" style={i(8)}>
-            <p className="jr-role">
-              <ClaimText claim={scene.role} />
-            </p>
-            <ul className="jr-cons">
-              {scene.constraints.map((c, k) => (
-                <li key={k}>
-                  <ClaimText claim={c} />
-                </li>
-              ))}
-            </ul>
-          </div>
         </>
       );
 
     case "evidence":
       return (
         <>
-          <Head scene={scene} n={n}>
-            <ul className="ev-methods rv" style={i(2)}>
-              {scene.methods.map((x, k) => (
-                <li key={k}>
-                  <ClaimText claim={x} />
-                </li>
-              ))}
-            </ul>
-          </Head>
-          <div className="ev-grid" role="table" aria-label="Evidence to decision">
-            <div className="ev-hd" role="row">
-              <span role="columnheader">What we heard</span>
-              <span role="columnheader">What it meant</span>
-              <span role="columnheader">What we decided for II</span>
-            </div>
+          <Head scene={scene} n={n} />
+          <ol className="ev-list">
             {scene.rows.map((row, k) => (
-              <div key={k} className="ev-row" role="row">
-                <span className="ev-cell rv" role="cell" style={i(3 + k * 1.5)}>
+              <li key={k} className="ev-item rv" style={i(2 + k)}>
+                <span className="ev-src">
                   <ClaimText claim={row.evidence} />
                 </span>
-                <span className="ev-cell rv" role="cell" style={i(3.5 + k * 1.5)}>
-                  <ClaimText claim={row.insight} />
-                </span>
-                <span className="ev-cell ev-dec rv" role="cell" style={i(4 + k * 1.5)}>
+                <span className="ev-arrow">→</span>
+                <span className="ev-dec">
                   <ClaimText claim={row.decision} />
                 </span>
-              </div>
+              </li>
             ))}
-          </div>
-          <p className="ev-limits rv" style={i(9)}>
-            <ClaimText claim={scene.limits} />
-          </p>
+          </ol>
         </>
       );
 
@@ -157,30 +118,17 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
       return (
         <>
           <Head scene={scene} n={n} />
-          <p className="hy-outcome rv" style={i(2)}>
-            <span className="k">// desired outcome</span> <ClaimText claim={scene.outcome} />
-          </p>
           <div className="hy-hand">
             {scene.cards.map((c, k) => (
-              <div key={k} className="hy-deal rv" style={{ ...i(3 + k), ["--rot" as string]: `${(k - 1) * 1.2}deg` }}>
+              <div key={k} className="hy-deal rv" style={{ ...i(2 + k), ["--rot" as string]: `${(k - 1) * 1.2}deg` }}>
                 <CardFront rank={String(k + 1)} suit={c.suit} className="hy-card">
-                  <div className="hy-body">
-                    <span className="hy-k">We believed</span>
-                    <p>
-                      <ClaimText claim={c.belief} />
-                    </p>
-                    <span className="hy-k">We'd know if</span>
-                    <p className="hy-s">
-                      <ClaimText claim={c.success} />
-                    </p>
-                  </div>
+                  <p className="hy-body">
+                    <ClaimText claim={c.belief} />
+                  </p>
                 </CardFront>
               </div>
             ))}
           </div>
-          <p className="hy-risk rv" style={i(7)}>
-            <span className="k">♠ riskiest</span> <ClaimText claim={scene.riskiest} />
-          </p>
         </>
       );
 
@@ -188,42 +136,22 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
       return (
         <>
           <Head scene={scene} n={n} />
-          <p className="dc-q rv" style={i(2)}>
-            {scene.question}
-          </p>
           <div className="dc-board">
             {scene.options.map((o, k) => (
-              <div key={o.name} className={`dc-opt rv ${o.chosen ? "is-chosen" : ""}`} style={i(3 + k)}>
+              <div key={o.name} className={`dc-opt rv ${o.chosen ? "is-chosen" : ""}`} style={i(2 + k)}>
                 {o.chosen && (
                   <div className="dc-chip">
                     <Chip tone="gold" />
-                    <span>We chose this</span>
                   </div>
                 )}
                 <h3>{o.name}</h3>
                 <p className="dc-sum">{o.summary}</p>
-                <dl className="dc-crit">
-                  {o.criteria.map((c) => (
-                    <div key={c.label}>
-                      <dt>{c.label}</dt>
-                      <dd>{c.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <p className="dc-why">
-                  <span className="k">{o.chosen ? "why" : "why not"}</span> <ClaimText claim={o.why} />
-                </p>
               </div>
             ))}
           </div>
-          <div className="dc-foot rv" style={i(7)}>
-            <p className="dc-down">
-              <ClaimText claim={scene.downside} tag />
-            </p>
-            <p className="dc-frame">
-              <ClaimText claim={scene.framing} />
-            </p>
-          </div>
+          <p className="dc-down rv" style={i(6)}>
+            <ClaimText claim={scene.downside} />
+          </p>
         </>
       );
 
@@ -231,36 +159,15 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
       return (
         <>
           <Head scene={scene} n={n} />
-          <div className="tl-wrap">
-            <ol className="tl">
-              <span className="tl-line" aria-hidden="true" />
-              {scene.milestones.map((ms, k) => (
-                <li key={k} className={`tl-item rv ${ms.mine ? "is-mine" : ""}`} style={i(2 + k * 0.7)}>
-                  <span className="tl-dot" aria-hidden="true" />
-                  <span className="tl-date">{ms.date}</span>
-                  <b className="tl-label">{ms.label}</b>
-                  {ms.detail && (
-                    <span className="tl-detail">
-                      <ClaimText claim={ms.detail} />
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ol>
-            <figure className="tl-artifact rv" style={i(7)}>
-              <pre>
-                {scene.artifact.lines.map((l, k) => (
-                  <span key={k} className={l.startsWith(">") ? "hl" : l.startsWith("//") ? "dim" : ""}>
-                    {l}
-                    {"\n"}
-                  </span>
-                ))}
-              </pre>
-              <figcaption>
-                <ClaimText claim={scene.artifact.caption} />
-              </figcaption>
-            </figure>
-          </div>
+          <ol className="tl-row">
+            {scene.milestones.map((ms, k) => (
+              <li key={k} className={`tl-cell rv ${ms.mine ? "is-mine" : ""}`} style={i(2 + k * 0.5)}>
+                <span className="tl-date">{ms.date}</span>
+                <span className="tl-dot" aria-hidden="true" />
+                <b className="tl-label">{ms.label}</b>
+              </li>
+            ))}
+          </ol>
         </>
       );
 
@@ -268,40 +175,9 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
       return (
         <>
           <Head scene={scene} n={n} />
-          <div className="rs-grid">
-            <div className="rs-chart rv" style={i(2)}>
-              <Funnel metrics={scene.metrics} title="Hacklanta I participant funnel" />
-            </div>
-            <div className="rs-lists">
-              <div className="rs-col rv" style={i(3)}>
-                <h3>
-                  <span className="rs-mark ok">♣</span> Worked
-                </h3>
-                <ul>
-                  {scene.worked.map((c, k) => (
-                    <li key={k}>
-                      <ClaimText claim={c} />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="rs-col rv" style={i(4)}>
-                <h3>
-                  <span className="rs-mark no">♦</span> Didn't
-                </h3>
-                <ul>
-                  {scene.didnt.map((c, k) => (
-                    <li key={k}>
-                      <ClaimText claim={c} />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+          <div className="rs-chart rv" style={i(2)}>
+            <Funnel metrics={scene.metrics} title="Hacklanta I funnel" />
           </div>
-          <p className="rs-open rv" style={i(6)}>
-            <span className="k">Still unresolved →</span> <ClaimText claim={scene.unresolved} />
-          </p>
         </>
       );
 
@@ -312,35 +188,21 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
       return (
         <>
           <Head scene={scene} n={n} />
-          <div className="ch-list">
-            <div className="ch-hd" aria-hidden="true">
-              <span>From I we learned</span>
-              <span>So in II we changed</span>
-              <span>Expecting</span>
-            </div>
+          <ol className="ch-list">
             {scene.changes.map((c, k) => (
-              <div key={k} className="ch-row rv" style={i(2 + k * 1.2)}>
+              <li key={k} className="ch-row rv" style={i(2 + k)}>
                 <span className="ch-n">{k + 1}</span>
-                <span className="ch-l">
-                  <ClaimText claim={c.learning} />
-                </span>
                 <span className="ch-c">
                   <ClaimText claim={c.change} />
+                  {c.tradeoff && (
+                    <span className="ch-t">
+                      <ClaimText claim={c.tradeoff} />
+                    </span>
+                  )}
                 </span>
-                <span className="ch-e">
-                  <ClaimText claim={c.effect} tag />
-                </span>
-                {c.tradeoff && (
-                  <span className="ch-t">
-                    <span className="ch-t-k">The tradeoff</span>
-                    <ClaimText claim={c.tradeoff} />
-                  </span>
-                )}
-              </div>
+              </li>
             ))}
-          </div>
-          <Sticker name="speakers" className="ch-st ch-st--1" />
-          <Sticker name="sparkle-yellow" className="ch-st ch-st--2" />
+          </ol>
         </>
       );
 
@@ -351,24 +213,14 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
           <div className="ro-grid">
             <ol className="ro-tl">
               {scene.milestones.map((ms, k) => (
-                <li key={k} className={`ro-item rv ${ms.mine ? "is-mine" : ""}`} style={i(2 + k * 0.6)}>
+                <li key={k} className={`ro-item rv ${ms.mine ? "is-mine" : ""}`} style={i(2 + k * 0.5)}>
                   <span className="ro-date">{ms.date}</span>
                   <b>{ms.label}</b>
-                  {ms.detail && (
-                    <span className="ro-d">
-                      <ClaimText claim={ms.detail} />
-                    </span>
-                  )}
                 </li>
               ))}
             </ol>
-            <div className="ro-right">
-              <div className="ro-chart rv" style={i(5)}>
-                <Funnel metrics={scene.metrics} title="Hacklanta II participant funnel" />
-              </div>
-              <p className="ro-scope rv" style={i(7)}>
-                <ClaimText claim={scene.scope} />
-              </p>
+            <div className="ro-chart rv" style={i(5)}>
+              <Funnel metrics={scene.metrics} title="Hacklanta II funnel" />
             </div>
           </div>
         </>
@@ -378,31 +230,16 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
       return (
         <>
           <Head scene={scene} n={n} />
-          <div className="rf-list">
-            <div className="rf-hd" aria-hidden="true">
-              <span />
-              <span>What happened</span>
-              <span>What I learned</span>
-              <span>What I'd do now</span>
-            </div>
+          <ol className="rf-list">
             {scene.reflections.map((x, k) => (
-              <div key={k} className="rf-row rv" style={i(2 + k * 1.2)}>
+              <li key={k} className="rf-row rv" style={i(2 + k)}>
                 <h3>{x.title}</h3>
-                <span>
-                  <ClaimText claim={x.happened} />
-                </span>
-                <span>
-                  <ClaimText claim={x.learned} />
-                </span>
                 <span className="rf-now">
                   <ClaimText claim={x.instead} />
                 </span>
-              </div>
+              </li>
             ))}
-          </div>
-          <p className="rf-next rv" style={i(6)}>
-            <ClaimText claim={scene.nextTest} />
-          </p>
+          </ol>
         </>
       );
 
@@ -417,37 +254,17 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
             <h2 className="cl-title rv" style={i(0)}>
               {scene.title}
             </h2>
-            <dl className="cl-facts">
-              <div className="rv" style={i(1)}>
-                <dt>Outcome</dt>
-                <dd>
-                  <ClaimText claim={scene.outcome} />
-                </dd>
-              </div>
-              <div className="rv" style={i(2)}>
-                <dt>My part</dt>
-                <dd>
-                  <ClaimText claim={scene.contribution} />
-                </dd>
-              </div>
-              <div className="rv" style={i(3)}>
-                <dt>Lesson</dt>
-                <dd>
-                  <ClaimText claim={scene.lesson} />
-                </dd>
-              </div>
-            </dl>
-            <p className="cl-q rv" style={i(4)}>
-              Questions? <a href="#/a-role">Evidence appendix →</a>
+            <p className="cl-lesson rv" style={i(1)}>
+              <ClaimText claim={scene.lesson} />
+            </p>
+            <p className="cl-q rv" style={i(2)}>
+              Questions?
             </p>
           </div>
-          <div className="cl-art rv" style={i(2)} aria-hidden="true">
+          <div className="cl-art rv" style={i(1)} aria-hidden="true">
             <Sticker name="dj-set" className="cl-dj" />
-            <Sticker name="yellow-flower" className="cl-flower" />
-            <Sticker name="green-shrub" className="cl-shrub" />
             <Sticker name="saturn" className="cl-saturn" />
             <Sticker name="sparkle-white" className="cl-sp1" />
-            <Sticker name="note-pink" className="cl-sp2" />
           </div>
         </div>
       );
