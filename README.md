@@ -17,7 +17,8 @@ network calls. The deck runs offline once it's built.
 
 | URL | What |
 |---|---|
-| `/` | The deck (phones get the reading view automatically) |
+| `/` | **Scroll version** (branch `scroll`): scroll through; the I→II flip is scrubbed by scrolling. `O` overview, `M` motion |
+| `/?view=deck` | Click-through deck (arrow keys) |
 | `/#/turn` | Deep link to any scene by id (see `src/content/story.ts`) |
 | `/?view=presenter` | Speaker notes, timers, prev/next — open in a second window |
 | `/?view=print` | Every scene + appendix, one 16:9 page each → **Print → Save as PDF** |
