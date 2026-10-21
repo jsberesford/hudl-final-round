@@ -1,36 +1,56 @@
-/* Scrolling version. Scroll vars (set by ScrollDeck): --mix casino→festival,
-   --flip card→pass, --strap, --draw ribbons, --copy turn headline, --progress. */
+/* Scroll-driven deck. Vars set every frame by ScrollDeck:
+   --s scroll position (scene units), --mix casino→festival, --flip card→pass,
+   --strap, --draw ribbons, --copy turn headline, --progress 0..1.
+   Per scene layer: --e (0..1 how far it has entered). */
 
-.scrolly { --mix: 0; --flip: 0; --strap: 0; --draw: 0; --copy: 0; --progress: 0; position: relative; }
+.scrolly { --mix: 0; --flip: 0; --strap: 0; --draw: 0; --copy: 0; --progress: 0; --s: 0; position: relative; }
 html[data-view="scroll"] body { background: var(--cz-black); }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
 
+/* backdrops follow the world mix, with a slow parallax drift */
 .sx-bd { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-.scrolly .bd-casino { opacity: calc(1 - var(--mix)); transition: none; }
-.scrolly .bd-festival { opacity: var(--mix); transition: none; }
+.scrolly .bd { transition: none; }
+.scrolly .bd-casino { opacity: calc(1 - var(--mix)); }
+.scrolly .bd-festival { opacity: var(--mix); }
+.scrolly .bd-casino-glow { transform: translateY(calc(var(--s) * -14px)) scale(calc(1 + var(--mix) * .4)); }
+.scrolly .bd-chip { opacity: .16; transform: translateY(calc(var(--s) * -22px)); }
+.scrolly .bd-suit { transform: translateY(calc(var(--s) * -10px)); }
+.scrolly .fz-ribbons { transform: translateY(clamp(-50px, calc((var(--s) - 10) * -12px), 50px)) scale(1.14); }
 .scrolly .fz-ribbon path { stroke-dasharray: 1 1; stroke-dashoffset: calc(1 - var(--draw)); }
-/* chips frame the opening, then step back while you read */
-.scrolly .bd-chip { opacity: calc(.18 + .37 * (1 - min(1, var(--progress) * 20))); }
+.scrolly .bd-festival-shade { opacity: calc(1 - .45 * var(--copy) * (1 - min(1, max(0, var(--s) - 9.55) / .45))); }
 
-.sx { position: relative; z-index: 1; height: 100vh; min-height: 560px; }
-.sx .stage { position: absolute; left: 50%; top: 50%; transform-origin: center; }
-.stage-scene[data-anim="pending"] .rv { opacity: 0; }
+/* one fixed stage; layers crossfade */
+.sx-viewport { position: fixed; inset: 0; z-index: 1; }
+.sx-layer { position: absolute; inset: 0; visibility: hidden; will-change: opacity, transform; }
+.sx-layer .stage { position: absolute; left: 50%; top: 50%; transform-origin: center; }
+.sx-spacer { position: relative; z-index: -1; }
 
-/* Pinned turn: 320vh of scroll drives the transformation. */
-.sx-turn { height: 320vh; }
-.sx-pin { position: sticky; top: 0; height: 100vh; }
+/* staggered, scroll-scrubbed reveal of each scene's elements */
+.scrolly .stage-scene .rv {
+  --r: clamp(0, calc(var(--e, 1) * 2.2 - var(--i, 0) * .14 - .2), 1);
+  opacity: var(--r);
+  transform: translate3d(0, calc((1 - var(--r)) * 28px), 0);
+  animation: none !important;
+}
+.scrolly.reduced .stage-scene .rv { --r: 1; }
+
+/* the turn, scrubbed */
 .scrolly .tn-casino { opacity: calc(1 - var(--mix)); animation: none; }
-.scrolly .tn-chip { transform: translateY(calc(var(--mix) * 420px)) rotate(calc(var(--mix) * 140deg)); animation: none; }
+.scrolly .tn-chip { transform: translateY(calc(var(--mix) * 460px)) rotate(calc(var(--mix) * 160deg)); animation: none; }
 .scrolly .tn-flip {
   animation: none;
   transform: translateY(calc((1 - var(--flip)) * 150px)) scale(calc(.86 + var(--flip) * .14)) rotateY(calc(var(--flip) * 180deg));
 }
 .scrolly .tn-strap { transform: scaleY(var(--strap)); animation: none; }
-.scrolly .tn-copy { opacity: var(--copy); transform: translateY(calc((1 - var(--copy)) * 24px)); animation: none; }
-.scrolly .tn-spark { opacity: var(--copy); transform: scale(calc(.3 + var(--copy) * .7)); animation: none; }
-.scrolly .bd-festival-shade { opacity: calc(1 - .45 * var(--copy) * (1 - min(1, max(0, var(--progress) - .62) * 20))); }
+.scrolly .tn-copy { opacity: var(--copy); transform: translateY(calc((1 - var(--copy)) * 30px)); animation: none; }
+.scrolly .tn-spark { opacity: var(--copy); transform: scale(calc(.3 + var(--copy) * .7)) rotate(calc((1 - var(--copy)) * -40deg)); animation: none; }
 
+/* chrome */
 .sx-progress { position: fixed; z-index: 7; left: 0; top: 0; height: 3px; width: 100%; transform-origin: left; transform: scaleX(var(--progress));
   background: linear-gradient(90deg, var(--cz-red), var(--cz-gold) 45%, var(--fz-cyan) 55%, var(--fz-lime), var(--fz-pink)); }
-.sx-hud { pointer-events: auto; }
-
-.scrolly.reduced .stage-scene .rv { animation: none !important; opacity: 1; }
+.sx-hint { position: fixed; z-index: 6; left: 50%; bottom: 58px; translate: -50% 0; font: 500 11px/1 var(--cz-mono); letter-spacing: .3em; text-transform: uppercase;
+  color: rgba(255,255,255,.45); opacity: calc(1 - min(1, var(--s) * 4)); pointer-events: none; }
+.sx-hint::after { content: ""; display: block; width: 1px; height: 26px; margin: 10px auto 0; background: linear-gradient(rgba(255,255,255,.5), transparent); animation: hint 1.8s ease-in-out infinite; transform-origin: top; }
+@keyframes hint { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+.scrolly.reduced .sx-hint::after { animation: none; }
