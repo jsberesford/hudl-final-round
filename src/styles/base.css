@@ -147,3 +147,32 @@ mark.ph[data-kind="confirm"] { color: #8fd8ff; }
 @media (prefers-reduced-motion: reduce) {
   .stage-scene[data-anim="play"] .rv { animation-duration: .01ms; }
 }
+
+/* ------------------------------------------------ calm placeholders */
+mark.ph { display: inline-block; padding: .05em .55em; border-width: 1px; border-radius: 999px; font: 600 .55em/1.5 var(--cz-mono); letter-spacing: .14em; text-transform: uppercase; vertical-align: .25em; opacity: .7; }
+.ph-draft { font-style: italic; opacity: .9; }
+.ph-draft sup { margin-left: .35em; font: 600 .42em/1 var(--cz-mono); letter-spacing: .14em; text-transform: uppercase; font-style: normal; color: #8fd8ff; opacity: .8; }
+.doc mark.ph, .presenter mark.ph { font: inherit; text-transform: none; letter-spacing: 0; vertical-align: baseline; }
+mark.ph-full { background: none; color: #ffb38a; border: 1px dashed currentColor; border-radius: 4px; padding: 0 .3em; }
+mark.ph-full[data-kind="confirm"] { color: #8fd8ff; }
+
+/* ------------------------------------------------ decluttered slides */
+/* Status badges live in the appendix; slides stay clean. */
+.scene:not(.l-appendix) .claim-tag { display: none; }
+/* Secondary detail moved to speaker notes. */
+.ev-methods, .jr-cons, .dc-crit, .dc-frame, .funnel-missing, .ap-nav, .ch-st, .jr-d, .tl-detail { display: none !important; }
+/* Decoration only frames the opening and the turn. */
+.deck:not([data-layout="opening"]):not([data-layout="turn"]) .bd-chip,
+.deck:not([data-layout="opening"]) .bd-suit,
+.scrolly .bd-chip, .scrolly .bd-suit { display: none; }
+.tag-hudl { opacity: .6; }
+
+/* Center each composition instead of pinning footers to the bottom edge. */
+.scene:not(.l-opening):not(.l-turn):not(.l-closing):not(.l-appendix) { justify-content: center; padding-top: 40px; padding-bottom: 70px; }
+.scene .jr-foot, .scene .ev-limits, .scene .hy-risk, .scene .dc-foot, .scene .rs-open, .scene .rf-next { margin-top: 56px !important; }
+.scene .hy-card { min-height: 0; }
+.scene .hy-body { padding: 64px 40px 56px; }
+.jr-foot { border-top: 0; padding-top: 0; }
+/* Controls stay out of the picture until you reach for them. */
+.hud { opacity: 0; }
+.hud:hover, .hud:focus-within { opacity: 1; }

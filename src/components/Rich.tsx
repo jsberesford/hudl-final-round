@@ -7,20 +7,47 @@ const TOKEN = new RegExp(`(${PLACEHOLDER.source})`, "g");
 const IS_TOKEN = new RegExp(`^${PLACEHOLDER.source}$`);
 
 /** Renders text, turning [CONFIRM: …]/[ADD: …] into visible editorial chips. */
-export function Rich({ text }: { text: string }) {
+export function Rich({ text, full = false }: { text: string; full?: boolean }) {
   const parts = text.split(TOKEN);
   return (
     <>
       {parts.map((p, i) =>
         IS_TOKEN.test(p) ? (
-          <mark key={i} className="ph" data-kind={p.startsWith("[ADD") ? "add" : "confirm"}>
-            {p.slice(1, -1)}
-          </mark>
+          full ? (
+            <mark key={i} className="ph-full" data-kind={p.startsWith("[ADD") ? "add" : "confirm"}>
+              {p.slice(1, -1)}
+            </mark>
+          ) : (
+            <Placeholder key={i} token={p} />
+          )
         ) : (
           p
         ),
       )}
     </>
+  );
+}
+
+/**
+ * On slides a placeholder stays visible but quiet: drafted wording ("e.g. '…'")
+ * shows in italics marked as draft; anything else is a small pill whose full
+ * note is in the tooltip and in ?view=report.
+ */
+function Placeholder({ token }: { token: string }) {
+  const kind = token.startsWith("[ADD") ? "add" : "confirm";
+  const note = token.slice(1, -1);
+  const draft = note.match(/e\.g\.\s*'([^']+)'/)?.[1];
+  if (draft)
+    return (
+      <span className="ph-draft" title={note}>
+        {draft}
+        <sup>draft</sup>
+      </span>
+    );
+  return (
+    <mark className="ph" data-kind={kind} title={note}>
+      {kind === "add" ? "to add" : "to confirm"}
+    </mark>
   );
 }
 

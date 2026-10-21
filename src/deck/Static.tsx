@@ -60,10 +60,10 @@ export function NotesView() {
             {k + 1}. {s.title} <small>{mmss(s.seconds)} planned · ~{mmss(narrationSeconds(s))} draft</small>
           </h2>
           <p>
-            <b>Key point:</b> <Rich text={s.notes.keyPoint} />
+            <b>Key point:</b> <Rich full text={s.notes.keyPoint} />
           </p>
           <p>
-            <Rich text={s.notes.narration} />
+            <Rich full text={s.notes.narration} />
           </p>
           {s.notes.followUps.length > 0 && (
             <>
@@ -73,7 +73,7 @@ export function NotesView() {
                   <div key={f.q}>
                     <dt>{f.q}</dt>
                     <dd>
-                      <Rich text={f.a} />
+                      <Rich full text={f.a} />
                     </dd>
                   </div>
                 ))}
@@ -127,7 +127,7 @@ export function ReportView() {
       <ol>
         {uniq.map((x, i) => (
           <li key={i}>
-            <small>{x.where}</small> — <Rich text={x.p} />
+            <small>{x.where}</small> — <Rich full text={x.p} />
           </li>
         ))}
       </ol>

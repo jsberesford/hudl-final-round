@@ -106,21 +106,21 @@ export const scenes: Scene[] = [
     title: "Getting a student from curious to shipping",
     takeaway: "The event is the easy part. The path into it is where students drop.",
     seconds: 70,
-    user: m("[CONFIRM: primary user — e.g. GSU students, many first-time hackers, often without a team]"),
+    user: m("[CONFIRM: primary user — e.g. 'GSU students, many first-time hackers, often without a team']"),
     steps: [
       { label: "Discover", detail: "Landing page, club channels" },
       {
         label: "Apply",
         detail: "Tally form, linked to a Clerk login",
-        friction: r("[CONFIRM: did applicants struggle with the separate form + login?] Inferred from II's goals: a ~4-minute application and unambiguous status.", "ii-spec"),
+        friction: r("Separate form + login [CONFIRM: did applicants struggle here? Inferred from II's ~4-minute, no-account goal]", "ii-spec"),
       },
       { label: "Wait", detail: "Status page" },
-      { label: "Confirm", detail: "Confirm attendance & find team", friction: m("[ADD: evidence of drop-off between acceptance and confirmation]") },
+      { label: "Confirm", detail: "Confirm attendance & find team", friction: r("Drop-off after acceptance [ADD: evidence of drop-off between acceptance and confirmation]") },
       { label: "Team up", detail: "Team matcher in the dashboard" },
       { label: "Build", detail: "12 hours on campus" },
       { label: "Demo", detail: "Judging across 4 tracks" },
     ],
-    role: v("My role: VP of progsu. I owned event direction, the participant experience, ops & volunteer scheduling, and sponsors & growth. Site engineering was led by teammates.", "jared"),
+    role: v("I owned direction, the participant experience, ops, and sponsors. Teammates engineered the site.", "jared"),
     constraints: [
       v("~4 weeks of planning (per progsu's recap)", "v0-recap"),
       v("Student volunteer team", "jared"),
@@ -167,7 +167,7 @@ export const scenes: Scene[] = [
         decision: v("Board scheduling across a 56-hour ops window", "sched"),
       },
     ],
-    limits: r("Limits: survey respondents self-select, and the people who dropped out before the event mostly never answered. The retro reflects organizers' view, not participants'. [ADD: survey response rate]"),
+    limits: r("Limit: the students who dropped out are the ones least likely to answer a survey. [ADD: survey response rate]"),
     notes: {
       keyPoint: "Each change in II traces back to a specific thing we heard — and I'm honest about who we didn't hear from.",
       narration:
@@ -187,25 +187,25 @@ export const scenes: Scene[] = [
     title: "The bets we placed",
     takeaway: "Three beliefs, each with a way to know if we were wrong.",
     seconds: 55,
-    outcome: m("[CONFIRM: desired outcome for I — e.g. 'a first-time builder can apply, team up, and ship in one day']"),
+    outcome: m("[CONFIRM: desired outcome for I — e.g. 'A first-timer can apply, team up, and ship in one day.']"),
     cards: [
       {
         suit: "♠",
-        belief: h("A one-day, 12-hour format lowers the bar enough for first-timers to show up. [CONFIRM: held at the time?]", "v0-og"),
+        belief: h("One 12-hour day is a small enough ask for first-timers.", "v0-og"),
         success: m("[ADD: success criterion — e.g. show-up rate of accepted applicants]"),
       },
       {
         suit: "♥",
-        belief: h("A built-in team matcher gets solo applicants into teams before the day. [CONFIRM]", "v0-teams"),
+        belief: h("A team matcher gets solo applicants onto teams.", "v0-teams"),
         success: m("[ADD: success criterion — e.g. share of solo applicants on a team by event day]"),
       },
       {
         suit: "♦",
-        belief: h("A strong theme makes a first-year event feel worth applying to. [CONFIRM]"),
+        belief: h("A bold theme makes a first-year event worth applying to."),
         success: m("[ADD: success criterion — e.g. applications vs. goal]"),
       },
     ],
-    riskiest: m("[CONFIRM: the riskiest assumption and why]"),
+    riskiest: m("[CONFIRM: that we held these beliefs before I, and which was riskiest]"),
     notes: {
       keyPoint: "We had explicit beliefs; I can name which was riskiest and how we'd know.",
       narration:
@@ -227,7 +227,7 @@ export const scenes: Scene[] = [
     options: [
       {
         name: "Off-the-shelf only",
-        summary: "Form + Discord, nothing custom",
+        summary: "A form and a Discord",
         why: m("[ADD: why not — e.g. no status or team matching]"),
         criteria: [
           { label: "Speed", value: "Fastest" },
@@ -237,9 +237,9 @@ export const scenes: Scene[] = [
       },
       {
         name: "Stitched",
-        summary: "Tally intake → our status page + team matcher → DevSpot submissions",
+        summary: "Tally form → our dashboard → DevSpot",
         chosen: true,
-        why: v("What shipped: Tally form linked to Clerk login, our dashboard for status and teams, winners posted with DevSpot links.", "v0-tally"),
+        why: v("Shipped in weeks, with status and teams we controlled.", "v0-tally"),
         criteria: [
           { label: "Speed", value: "Weeks" },
           { label: "Participant clarity", value: "Medium" },
@@ -248,7 +248,7 @@ export const scenes: Scene[] = [
       },
       {
         name: "Fully custom",
-        summary: "Our own form, portal, review & check-in",
+        summary: "Our own form, portal, and check-in",
         why: m("[ADD: why not for I — e.g. 4-week timeline, engineering capacity]"),
         criteria: [
           { label: "Speed", value: "Slowest" },
@@ -257,7 +257,7 @@ export const scenes: Scene[] = [
         ],
       },
     ],
-    downside: r("Accepted downside: two systems and a login stitched together, so applicants crossed a seam. [CONFIRM: did that cost us?]", "v0-tally"),
+    downside: r("The cost we accepted: applicants crossed a seam between two systems. [CONFIRM: did that cost us?]", "v0-tally"),
     notes: {
       keyPoint: "The hardest call was speed versus a coherent experience — and we chose speed knowingly.",
       narration:
@@ -303,15 +303,12 @@ export const scenes: Scene[] = [
     chapter: "Hacklanta I",
     world: "casino",
     title: "What actually happened",
-    takeaway: "It worked. [CONFIRM: the unresolved problem we carried forward]",
+    takeaway: "Real signals, honest limits, one open problem.",
     seconds: 80,
     metrics: metricsI,
-    worked: [
-      v("Projects judged and winners announced across 4 tracks (e.g. People's Choice: PulseRoute)", "v0-recap"),
-      m("[ADD: what improved / what participants valued]"),
-    ],
+    worked: [v("Projects judged across 4 tracks", "v0-recap"), m("[ADD: what participants valued]")],
     didnt: [m("[ADD: what didn't work — with evidence]")],
-    unresolved: m("[CONFIRM: the one unresolved problem that motivated II]"),
+    unresolved: m("[CONFIRM: the problem we carried into II]"),
     notes: {
       keyPoint: "Real signals, honest limits, and one unresolved problem.",
       narration:
@@ -350,19 +347,19 @@ export const scenes: Scene[] = [
     changes: [
       {
         learning: m("[CONFIRM: what I taught us about applying]"),
-        change: v("A ~4-minute application on the festival pass itself — no account, unambiguous submission status", "ii-spec"),
-        effect: h("More completed applications, fewer 'did it go through?' questions", "ii-spec"),
+        change: v("A 4-minute application on the pass itself. No account.", "ii-spec"),
+        effect: h("More finished applications", "ii-spec"),
       },
       {
         learning: m("[CONFIRM: what I taught us about reach]"),
-        change: v("$1 referral for every student who applies through your link, plus a shareable queue ticket", "ii-referral"),
-        effect: h("Applicants recruit applicants; worst-case cost ≈ the 2,000 signup goal in dollars", "ii-referral"),
-        tradeoff: v("We refused to show '600 people applied' as social proof. A fake count is a false statement made while offering money.", "ii-queue"),
+        change: v("$1 for every student you refer", "ii-referral"),
+        effect: h("Applicants recruit applicants, capped at ~$2,000", "ii-referral"),
+        tradeoff: v("We refused to fake a '600 people applied' counter.", "ii-queue"),
       },
       {
         learning: m("[CONFIRM: what the retro taught us about staffing]"),
-        change: v("I built Hacklanta-Scheduler: availability, coverage, conflicts, max hours, and breaks across a 56-hour ops window", "sched"),
-        effect: h("No uncovered shifts, no burned-out board members overnight", "sched"),
+        change: v("I built a scheduler to staff a 56-hour weekend", "sched"),
+        effect: h("No uncovered or burnout shifts", "sched"),
       },
     ],
     notes: {
@@ -393,7 +390,7 @@ export const scenes: Scene[] = [
       { date: "Oct 9–11", label: "Show weekend", detail: v("36 hours at Georgia State", "ii-event") },
     ],
     metrics: metricsII,
-    scope: v("Scope grew: team finder, referrals, and an organizer dashboard were all v1 non-goals, and all shipped.", "ii-spec"),
+    scope: v("Scope grew: three planned non-goals shipped.", "ii-spec"),
     notes: {
       keyPoint: "Execution was fast, scope grew, and I separate targets from results.",
       narration:
@@ -416,24 +413,24 @@ export const scenes: Scene[] = [
     reflections: [
       {
         title: "Instrument before launch",
-        happened: r("For I, I can't show a clean funnel from application to check-in. [CONFIRM]"),
-        learned: r("Without it I can't prove II's changes worked."),
-        instead: r("Define the funnel and take dated snapshots before opening applications."),
+        happened: r("No clean funnel for I. [CONFIRM]"),
+        learned: r("So I can't prove II worked better."),
+        instead: r("Define the funnel before launch."),
       },
       {
         title: "Re-plan when scope grows",
-        happened: v("Three v1 non-goals shipped anyway.", "ii-spec"),
-        learned: r("Each was reasonable alone; together they pulled time from [ADD]."),
-        instead: r("Put every added feature through the same check: what does it move, and what does it displace?"),
+        happened: v("Three non-goals shipped anyway.", "ii-spec"),
+        learned: r("Each made sense alone, not together."),
+        instead: r("Ask what each addition moves and displaces."),
       },
       {
         title: "Pilot the risky bet",
-        happened: v("Referral payouts launched uncapped.", "ii-referral"),
+        happened: v("Referrals launched uncapped.", "ii-referral"),
         learned: r("[ADD: what referral data showed]"),
-        instead: r("Run a capped pilot for a week, then scale only if cost per applicant beats paid alternatives."),
+        instead: r("Pilot capped for a week, then scale."),
       },
     ],
-    nextTest: r("Next test: [ADD — e.g. compare show-up rate of referred vs. organic applicants]"),
+    nextTest: r("Next test: do referred students show up as often as organic ones?"),
     notes: {
       keyPoint: "Specific mistakes, specific alternatives, and a decision rule.",
       narration:
@@ -451,8 +448,8 @@ export const scenes: Scene[] = [
     takeaway: "The transferable skill: tie every change to evidence and name its cost.",
     seconds: 60,
     outcome: m("[ADD: the verified outcome, restated]"),
-    contribution: v("I set the direction, owned the participant path and ops, and shipped two versions six months apart.", "jared"),
-    lesson: r("Tie every change to evidence, name what it costs, and measure it before you launch."),
+    contribution: v("Direction, participant path, and ops — two versions, six months apart.", "jared"),
+    lesson: r("Tie each change to evidence. Name its cost. Measure first."),
     notes: {
       keyPoint: "Return to the outcome, my contribution, and one transferable lesson. Then invite questions.",
       narration:

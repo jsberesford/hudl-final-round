@@ -79,16 +79,16 @@ export function Presenter() {
       {scene && (
         <>
           <p className="pr-key">
-            <Rich text={scene.notes.keyPoint} />
+            <Rich full text={scene.notes.keyPoint} />
           </p>
           <p className="pr-narr">
-            <Rich text={scene.notes.narration} />
+            <Rich full text={scene.notes.narration} />
           </p>
           <p className="pr-meta">Draft narration ≈ {mmss(narrationSeconds(scene))} at 140 wpm</p>
           {scene.notes.followUps.map((f) => (
             <details key={f.q}>
               <summary>{f.q}</summary>
-              <Rich text={f.a} />
+              <Rich full text={f.a} />
             </details>
           ))}
         </>
