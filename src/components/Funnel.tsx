@@ -1,51 +1,24 @@
 import type { Metric } from "../content/types";
-import { sourceById } from "../content/story";
-
-const fmt = (n: number) => n.toLocaleString("en-US");
 
 /**
- * Step funnel. Bars render only for `actual` metrics; targets render as a
- * labelled marker; anything pending shows an explicit empty state. Never
- * substitutes sample values.
+ * Funnel as a run of stages. Bars share a zero baseline and only appear for
+ * verified (`actual`) metrics, so an empty chart never implies a shape.
  */
-export function Funnel({ metrics, title }: { metrics: Metric[]; title: string }) {
-  const actual = metrics.filter((x) => x.status === "actual" && x.value != null);
-  const targets = metrics.filter((x) => x.status === "target" && x.value != null);
-  const steps = metrics.filter((x) => x.status !== "target");
-  const max = Math.max(1, ...actual.map((x) => x.value!), ...targets.map((x) => x.value!));
-  const empty = actual.length === 0;
-
+export function Funnel({ metrics }: { metrics: Metric[] }) {
+  const known = (x?: Metric) => x?.status === "actual" && x.value != null;
+  const max = Math.max(1, ...metrics.filter(known).map((x) => x.value!));
   return (
-    <figure className={`funnel ${empty ? "is-empty" : ""}`}>
-      <figcaption className="funnel-cap">
-        <span>{title}</span>
-        {empty && <span className="funnel-flag">Awaiting verified data</span>}
-      </figcaption>
-      {targets.map((t) => (
-        <div key={t.id} className="funnel-target" title={sourceById[t.source ?? ""]?.ref}>
-          <span>Target, not a result</span>
-          <b>
-            {t.label}: {fmt(t.value!)} {t.unit}
-          </b>
-        </div>
-      ))}
-      <ol className="funnel-steps">
-        {steps.map((s, i) => {
-          const has = s.status === "actual" && s.value != null;
-          const prev = i > 0 ? steps[i - 1] : undefined;
-          const rate = has && prev?.status === "actual" && prev.value ? Math.round((s.value! / prev.value) * 100) : undefined;
+    <figure className="funnel">
+      <ol>
+        {metrics.map((s, k) => {
+          const prev = metrics[k - 1];
+          const rate = known(s) && known(prev) && prev.value ? Math.round((s.value! / prev.value) * 100) : null;
           return (
-            <li key={s.id} className="funnel-step rv" style={{ ["--i" as string]: i }}>
-              <span className="funnel-label">{s.label}</span>
-              <span className="funnel-track">
-                {has ? (
-                  <span className="funnel-bar" style={{ ["--w" as string]: `${(s.value! / max) * 100}%` }} />
-                ) : (
-                  <span className="funnel-missing">{s.definition}</span>
-                )}
-              </span>
-              <span className="funnel-val">{has ? fmt(s.value!) : "—"}</span>
-              <span className="funnel-rate">{rate != null ? `${rate}%` : ""}</span>
+            <li key={s.id}>
+              <b>{s.label}</b>
+              {known(s) && <span className="funnel-val">{s.value!.toLocaleString("en-US")}</span>}
+              {known(s) && <span className="funnel-track"><i style={{ width: `${(s.value! / max) * 100}%` }} /></span>}
+              <small>{rate != null ? `${rate}% of ${prev.label.toLowerCase()}` : s.definition}</small>
             </li>
           );
         })}

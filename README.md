@@ -1,8 +1,8 @@
-# Hacklanta I → II — Hudl PM interview presentation
+# Hacklanta I to II: Hudl PM interview presentation
 
 A presenter-controlled deck that tells Hacklanta I and II as two releases of one
 product. It opens in Hacklanta I's casino identity and turns into Hacklanta II's
-festival identity at scene 8.
+festival identity at slide 8, where the playing card flips into the festival pass.
 
 ## Run it
 
@@ -17,10 +17,9 @@ network calls. The deck runs offline once it's built.
 
 | URL | What |
 |---|---|
-| `/` | **Scroll version** (branch `scroll`): scroll through; the I→II flip is scrubbed by scrolling. `O` overview, `M` motion |
-| `/?view=deck` | Click-through deck (arrow keys) |
+| `/` | **The deck.** Arrow keys or Space |
 | `/#/turn` | Deep link to any scene by id (see `src/content/story.ts`) |
-| `/?view=presenter` | Speaker notes, timers, prev/next — open in a second window |
+| `/?view=presenter` | Speaker notes, timers, prev/next: open in a second window |
 | `/?view=print` | Every scene + appendix, one 16:9 page each → **Print → Save as PDF** |
 | `/?view=read` | Stacked reading view |
 | `/?view=notes` | Speaker-notes document (printable) |
@@ -28,10 +27,9 @@ network calls. The deck runs offline once it's built.
 
 ### Keys
 
-`→` / `Space` / `PageDown` next (the first press finishes any running animation) ·
-`←` previous · `S` skip motion · `O` overview / jump · `A` appendix · `M` motion
-on/off · `F` fullscreen · `Home`/`End`. Keys are ignored while typing in inputs; the
-trackpad and scroll wheel never navigate.
+`→` / `Space` / `PageDown` next (a press during the turn completes it) · `S` finish the turn · `←` previous · `Home` / `End` · `O` overview ·
+`A` appendix · `Esc` back to the story · `M` motion on/off · `F` fullscreen. Keys are
+ignored while typing, and the scroll wheel never navigates.
 
 ### Zoom setup
 
@@ -55,14 +53,14 @@ four helpers:
 - `r()`: retrospective view
 - `m()`: missing
 
-`[ADD: …]` / `[CONFIRM: …]` placeholders render as dashed chips, so unfinished
-copy can't pass as final. `/?view=report` lists every one.
+`[ADD: …]` / `[CONFIRM: …]` render as small tags, so unconfirmed copy can't pass as
+final. `/?view=report` lists every one.
 
-Metrics: give a funnel step a `value` and set `status: "actual"` (plus `source`,
-`cohort`) and its bar appears. Steps without data show an explicit empty state.
-Sample numbers are never filled in.
+Metrics: give a step a `value` and set `status: "actual"` (plus `source`) and its bar
+and rates appear. Everything else shows only its definition. Never enter an unverified number.
 
-See `CONTENT-TODO.md` for the prioritized list of facts still needed, and
+See `VERIFICATION.md` for every claim that needs your confirmation, `SPEAKER-NOTES.md`
+for timing and notes, and
 `PROVENANCE.md` for where every reused asset came from.
 
 ## Checks
@@ -70,7 +68,7 @@ See `CONTENT-TODO.md` for the prioritized list of facts still needed, and
 ```sh
 pnpm test                                   # navigation / turn logic / content invariants
 pnpm build && pnpm preview &                # then:
-SHOTS=/tmp/deck pnpm check:browser          # 25 browser checks + screenshots + PDF
+SHOTS=/tmp/deck pnpm check:browser          # fit at 4 sizes, navigation, print
 SHOTS=/tmp/deck pnpm shots                  # screenshot every scene
 ```
 
@@ -81,5 +79,5 @@ src/content/      story.ts (edit me), types.ts
 src/deck/         Deck shell, keyboard, overview, presenter, static views, sync
 src/scenes/       SceneView (one composition per layout), AppendixView
 src/components/   casino.tsx (chips, cards, labels), festival.tsx (ribbons, pass, stickers), Funnel
-src/styles/       base (tokens, shell), casino, festival, scenes, turn (I→II), static (print/read/notes)
+src/styles/       base (tokens, backdrops, shell), casino, festival, scenes, turn (I to II), static (print/read/notes)
 ```

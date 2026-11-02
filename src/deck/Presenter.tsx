@@ -1,5 +1,5 @@
 /**
- * ?view=presenter — open in a second window, share only the audience window.
+ * ?view=presenter: open in a second window, share only the audience window.
  * Syncs over BroadcastChannel; the deck works without it.
  */
 import { useEffect, useState } from "react";
@@ -70,7 +70,7 @@ export function Presenter() {
         <button onClick={() => setStart(start ? null : Date.now())}>{start ? "Reset timer" : "Start timer"}</button>
         <button onClick={() => send(step(id, -1))}>← Prev</button>
         <button onClick={() => send(step(id, 1))}>Next →</button>
-        {!channel && <span className="pr-warn">BroadcastChannel unavailable — presenter can't sync.</span>}
+        {!channel && <span className="pr-warn">BroadcastChannel is unavailable, so the presenter can't sync.</span>}
       </header>
       <h1>
         {scene ? `${scenes.indexOf(scene) + 1}. ${scene.title}` : appx?.title}
@@ -84,6 +84,8 @@ export function Presenter() {
           <p className="pr-narr">
             <Rich full text={scene.notes.narration} />
           </p>
+          {scene.notes.transition && <p className="pr-narr"><b>Next:</b> {scene.notes.transition}</p>}
+          {scene.notes.caveat && <p className="pr-key">Caveat: {scene.notes.caveat}</p>}
           <p className="pr-meta">Draft narration ≈ {mmss(narrationSeconds(scene))} at 140 wpm</p>
           {scene.notes.followUps.map((f) => (
             <details key={f.q}>

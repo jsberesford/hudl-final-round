@@ -1,5 +1,5 @@
 /**
- * Static views — no animation, everything in its final state.
+ * Static views: no animation, everything in its final state.
  *   ?view=print     every scene + appendix, one 16:9 page each (Print → PDF)
  *   ?view=read      stacked reading view (default on phones)
  *   ?view=notes     speaker notes document
@@ -23,7 +23,7 @@ export function PrintView({ reading = false }: { reading?: boolean }) {
     <div className={`static ${reading ? "reader" : "print"}`}>
       {reading && (
         <header className="reader-top">
-          <b>Hacklanta I → II</b> · reading view · <a href="?view=print">print version</a> · <a href="./">presentation</a>
+          <b>Hacklanta I to II</b> · reading view · <a href="?view=print">print version</a> · <a href="./">presentation</a>
         </header>
       )}
       {scenes.map((s, k) => (
@@ -50,9 +50,9 @@ export function NotesView() {
   const planned = scenes.reduce((t, s) => t + s.seconds, 0);
   return (
     <article className="doc">
-      <h1>Speaker notes · Hacklanta I → II</h1>
+      <h1>Speaker notes · Hacklanta I to II</h1>
       <p>
-        Planned: <b>{mmss(planned)}</b> · Draft narration at {WPM} wpm: <b>{mmss(scenes.reduce((t, s) => t + narrationSeconds(s), 0))}</b> (excluding placeholders — not a rehearsal)
+        Planned: <b>{mmss(planned)}</b> · Draft narration at {WPM} wpm: <b>{mmss(scenes.reduce((t, s) => t + narrationSeconds(s), 0))}</b> (excluding open items, not a rehearsal)
       </p>
       {scenes.map((s, k) => (
         <section key={s.id}>
@@ -65,6 +65,16 @@ export function NotesView() {
           <p>
             <Rich full text={s.notes.narration} />
           </p>
+          {s.notes.transition && (
+            <p>
+              <b>Transition:</b> {s.notes.transition}
+            </p>
+          )}
+          {s.notes.caveat && (
+            <p>
+              <b>Caveat:</b> {s.notes.caveat}
+            </p>
+          )}
           {s.notes.followUps.length > 0 && (
             <>
               <h3>Likely follow-ups</h3>
@@ -99,7 +109,7 @@ export function ReportView() {
     <article className="doc">
       <h1>Content completeness</h1>
       <p>
-        <b>{total}</b> unresolved placeholders. This page is for editing only; placeholders also render as dashed chips in the deck so they can't pass as finished content.
+        <b>{total}</b> unresolved placeholders. This page is for editing only; they also render as small tags in the deck so they can't pass as finished content.
       </p>
       <table>
         <thead>
@@ -127,7 +137,7 @@ export function ReportView() {
       <ol>
         {uniq.map((x, i) => (
           <li key={i}>
-            <small>{x.where}</small> — <Rich full text={x.p} />
+            <small>{x.where}:</small> <Rich full text={x.p} />
           </li>
         ))}
       </ol>

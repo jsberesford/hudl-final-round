@@ -17,16 +17,14 @@ import "./styles/festival.css";
 import "./styles/scenes.css";
 import "./styles/turn.css";
 import "./styles/static.css";
-import "./styles/scroll.css";
 
 import { Deck } from "./deck/Deck";
-import { ScrollDeck } from "./deck/ScrollDeck";
 import { Presenter } from "./deck/Presenter";
 import { NotesView, PrintView, ReportView } from "./deck/Static";
 
 const params = new URLSearchParams(location.search);
 const narrow = matchMedia("(max-width: 820px)").matches;
-const view = params.get("view") ?? (narrow ? "read" : "scroll");
+const view = params.get("view") ?? (narrow ? "read" : "deck");
 
 const App = () => {
   switch (view) {
@@ -40,10 +38,8 @@ const App = () => {
       return <ReportView />;
     case "presenter":
       return <Presenter />;
-    case "deck":
-      return <Deck />;
     default:
-      return <ScrollDeck />;
+      return <Deck />;
   }
 };
 

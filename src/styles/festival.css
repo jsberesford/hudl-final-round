@@ -1,11 +1,6 @@
-/* Festival components — adapted from hacklanta-ii@4643f46 galaxy.module.css,
+/* Festival components, adapted from hacklanta-ii@4643f46 galaxy.module.css,
    credential.module.css, landing.module.css. Namespaced .fz-*. */
 
-.w-festival { --ink: var(--fz-paper); --muted: var(--fz-muted); --accent: var(--fz-lime); --line: rgba(255,255,255,.14); --panel: rgba(8,8,12,.86); color: var(--fz-paper); font-family: var(--fz-body); }
-.w-festival .sc-title { font: 600 92px/.86 var(--fz-display); letter-spacing: .005em; text-transform: none; }
-.w-festival .sc-take { font: 400 24px/1.35 var(--fz-body); color: var(--fz-muted); }
-.w-festival .k { font: 700 .6em/1 var(--fz-body); letter-spacing: .14em; text-transform: uppercase; color: var(--fz-lime); margin-right: .6em; vertical-align: .2em; }
-.w-festival h3 { font: 600 36px/1 var(--fz-display); margin: 0; }
 
 .fz-label { display: inline-flex; align-items: center; gap: 12px; font: 700 13px/1 var(--fz-body); letter-spacing: .2em; text-transform: uppercase; color: var(--fz-muted); }
 .fz-label-n { font: 600 30px/1 var(--fz-display); letter-spacing: 0; padding: 4px 10px 0; border-radius: 999px; color: var(--fz-ink); background: linear-gradient(90deg, var(--fz-cyan), var(--fz-lime) 50%, var(--fz-orange)); }

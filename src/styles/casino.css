@@ -1,7 +1,6 @@
-/* Casino components — adapted from hacklanta-v0@48438c5 Hero.astro / TrackGrid.astro.
+/* Casino components, adapted from hacklanta-v0@48438c5 Hero.astro / TrackGrid.astro.
    Namespaced .cz-* so they coexist with the festival layer. */
 
-.w-casino { --ink: var(--cz-white); --muted: var(--cz-gray); --accent: var(--cz-red-bright); --line: var(--cz-border-light); --panel: rgba(31,14,19,.78); color: var(--cz-white); font-family: var(--cz-body); }
 
 /* poker chip */
 .cz-chip { --chip-size: 80px; --chip-color: #b22234; --chip-color-dark: #8a1a28; --chip-stripe: #e8dcc8; width: var(--chip-size); height: var(--chip-size); border-radius: 50%; position: relative; filter: drop-shadow(0 6px 12px rgba(0,0,0,.7)); }
@@ -36,10 +35,5 @@
 .cz-suits .r { color: rgba(196,30,58,.45); }
 @keyframes blink { 50% { opacity: 0; } }
 .cz-blink { animation: blink 1.1s steps(1) infinite; }
-.deck.reduced .cz-blink { animation: none; }
 
-/* casino scene chrome */
-.w-casino .sc-title { font: italic 400 76px/.95 var(--cz-serif); letter-spacing: -.01em; color: var(--cz-white); }
-.w-casino .sc-take { font: 400 24px/1.35 var(--cz-body); color: var(--cz-gray); }
-.w-casino .k { font: 500 .62em/1 var(--cz-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--cz-red-bright); margin-right: .6em; vertical-align: .2em; }
-.w-casino h3 { font: italic 400 34px/1 var(--cz-serif); margin: 0; }
+.cz-card--front { background: #E8DFCB; }

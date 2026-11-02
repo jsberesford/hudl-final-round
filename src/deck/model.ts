@@ -1,9 +1,7 @@
 import { appendix, scenes } from "../content/story";
 import type { World } from "../content/types";
 
-export type Slide =
-  | { kind: "scene"; id: string; n: number; world: World; title: string; chapter: string }
-  | { kind: "appendix"; id: string; n: number; world: World; title: string; chapter: string };
+export type Slide = { kind: "scene" | "appendix"; id: string; n: number; world: World; title: string; chapter: string };
 
 export const mainSlides: Slide[] = scenes.map((s, k) => ({ kind: "scene", id: s.id, n: k + 1, world: s.world, title: s.title, chapter: s.chapter }));
 export const appendixSlides: Slide[] = appendix.map((a, k) => ({ kind: "appendix", id: a.id, n: k + 1, world: "festival", title: a.title, chapter: "Appendix" }));
@@ -29,7 +27,7 @@ export function idFromHash(hash: string): string {
 }
 
 /**
- * Whether arriving at `to` from `from` should play the I→II transformation:
+ * Whether arriving at `to` from `from` should play the I to II transformation:
  * only a single forward step into the turn scene, with motion allowed.
  */
 export function shouldPlayTurn(from: string | null, to: string, reduced: boolean): boolean {

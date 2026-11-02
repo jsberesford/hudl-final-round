@@ -1,6 +1,6 @@
 /* ---------------------------------------------------------------- tokens */
 :root {
-  /* Casino — hacklanta-v0@48438c5 apps/web/src/styles/global.css */
+  /* Casino, from hacklanta-v0@48438c5 apps/web/src/styles/global.css */
   --cz-black: #1a0a0e;
   --cz-card: #1f0e13;
   --cz-elevated: #261418;
@@ -18,7 +18,7 @@
   --cz-mono: "JetBrains Mono", ui-monospace, monospace;
   --cz-body: "Manrope Variable", system-ui, sans-serif;
 
-  /* Festival — hacklanta-ii@4643f46 src/app/globals.css */
+  /* Festival, from hacklanta-ii@4643f46 src/app/globals.css */
   --fz-ink: #01030a;
   --fz-paper: #faf7ff;
   --fz-muted: #a8a2b7;
@@ -35,42 +35,35 @@
 
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; height: 100%; }
-body {
-  background: var(--cz-black);
-  color: var(--cz-white);
-  font-family: var(--cz-body);
-  -webkit-font-smoothing: antialiased;
-}
-html[data-view="deck"] body { overflow: hidden; }
+body { background: var(--cz-black); color: var(--cz-white); font-family: var(--cz-body); -webkit-font-smoothing: antialiased; }
+html[data-view="deck"], html[data-view="deck"] body { overflow: hidden; overscroll-behavior: none; }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 3px solid var(--fz-lime); outline-offset: 3px; }
 
 /* ------------------------------------------------------------------ deck */
 .deck { position: fixed; inset: 0; overflow: hidden; background: var(--cz-black); transition: background-color .5s; }
 .deck[data-world="festival"] { background: var(--fz-ink); }
-
 .stage-outer { position: absolute; inset: 0; z-index: 2; }
-.stage { position: absolute; left: 50%; top: 50%; transform-origin: center; }
+.stage { position: absolute; left: 50%; top: 50%; transform-origin: center; overflow: hidden; }
 .stage-scene { position: absolute; inset: 0; }
 
 /* Backdrops: both always mounted; world decides which is visible. */
 .bd { position: absolute; inset: 0; z-index: 0; pointer-events: none; transition: opacity .45s ease; }
 .deck[data-world="casino"] .bd-festival, .deck[data-world="festival"] .bd-casino { opacity: 0; }
-.deck.reduced .bd { transition-duration: .25s; }
-
 .bd-casino { background: var(--cz-black); }
-.bd-casino-glow { position: absolute; left: 50%; top: 42%; width: 900px; height: 900px; translate: -50% -50%; border-radius: 50%; background: radial-gradient(circle, rgba(196,30,58,.22), rgba(196,30,58,.06) 45%, transparent 70%); }
-.bd-casino-gold { position: absolute; right: 8%; bottom: 6%; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,.08), transparent 70%); filter: blur(20px); }
+.bd-casino-glow { position: absolute; left: 50%; top: 42%; width: 1100px; height: 1100px; translate: -50% -50%; border-radius: 50%; background: radial-gradient(circle, rgba(196,30,58,.3), rgba(196,30,58,.08) 45%, transparent 70%); animation: glow 9s ease-in-out infinite; }
+@keyframes glow { 50% { opacity: .72; scale: 1.05; } }
+.bd-casino-gold { position: absolute; right: 8%; bottom: 6%; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,.1), transparent 70%); filter: blur(20px); }
 .bd-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.65)); }
-.bd-suit { position: absolute; font-size: 26vh; color: var(--cz-white); opacity: .025; line-height: 1; font-family: var(--cz-serif); }
-.bd-chip { position: absolute; --chip-size: clamp(44px, 5.2vw, 84px); opacity: .55; transition: opacity .4s; }
-/* chips set the scene on the opening, then step back behind dense copy */
-.deck:not([data-layout="opening"]) .bd-chip, .static .page:not([data-layout="opening"]) .bd-chip { opacity: .14; }
+.bd-suit { position: absolute; font-size: 26vh; color: var(--cz-white); opacity: .03; line-height: 1; font-family: var(--cz-serif); }
+.bd-chip { position: absolute; --chip-size: clamp(44px, 5.2vw, 84px); opacity: .6; transition: opacity .4s; }
+.deck:not([data-layout="opening"]):not([data-layout="turn"]) .bd-chip { display: none; }
+.deck:not([data-layout="opening"]) .bd-suit { opacity: .02; }
+.static .page:not([data-layout="opening"]) .bd-chip { display: none; }
 .bd-casino::after { /* film grain from the casino site */
   content: ""; position: absolute; inset: 0; opacity: .05;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-
 .bd-festival { background: var(--fz-ink); }
 .bd-stars {
   position: absolute; inset: 0; opacity: .8;
@@ -81,98 +74,53 @@ button { font: inherit; color: inherit; }
     radial-gradient(1px 1px at 6% 88%, #fff, transparent 60%), radial-gradient(1px 1px at 94% 86%, #fff, transparent 60%);
   background-size: 640px 520px;
 }
+.fz-wipe, .fz-wipe-inner { position: absolute; inset: 0; overflow: hidden; }
+.fz-wipe-edge { display: none; }
 .fz-ribbons { position: absolute; inset: 0; width: 100%; height: 100%; }
 /* Keep ribbons behind readable copy: dim them inside content scenes. */
-.bd-festival-shade { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 75% at 50% 50%, rgba(1,3,10,.82), rgba(1,3,10,.55) 70%, rgba(1,3,10,.25)); transition: opacity .6s; }
+.bd-festival-shade { position: absolute; inset: 0; background: linear-gradient(rgba(1,3,10,.9), rgba(1,3,10,.84)); transition: opacity .6s; }
 
 /* ------------------------------------------------------------------- HUD */
-.tag-hudl { position: fixed; z-index: 5; top: 14px; right: 18px; font: 500 11px/1 var(--cz-mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.42); }
-.hud {
-  position: fixed; z-index: 6; left: 0; right: 0; bottom: 0; height: 44px; padding: 0 16px;
-  display: flex; align-items: center; gap: 16px;
-  font: 500 11px/1 var(--cz-mono); letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.5);
-  opacity: .55; transition: opacity .2s;
-}
-.hud:hover, .hud:focus-within { opacity: 1; }
-.hud-chapter { white-space: nowrap; }
-.hud-progress { flex: 1; display: flex; gap: 4px; }
-.hud-progress i { flex: 1; height: 2px; background: rgba(255,255,255,.14); }
+.hud { position: fixed; z-index: 6; left: 0; right: 0; bottom: 0; height: 40px; padding: 0 18px; display: flex; align-items: center; gap: 14px; font: 500 12px/1 var(--cz-mono); color: rgba(255,255,255,.75); }
+.hud-chapter { white-space: nowrap; margin-left: auto; order: 2; }
+.hud-progress { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 2px; }
+.hud-progress i { flex: 1; height: 3px; background: transparent; }
 .hud-progress i.on[data-world="casino"] { background: var(--cz-red); }
 .hud-progress i.on[data-world="festival"] { background: linear-gradient(90deg, var(--fz-cyan), var(--fz-lime), var(--fz-pink)); }
-.hud-btns { display: flex; gap: 6px; }
-.hud button {
-  background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.14); border-radius: 4px; padding: 7px 10px; cursor: pointer;
-  font: inherit; letter-spacing: inherit; text-transform: inherit; color: rgba(255,255,255,.75);
-}
-.hud button:hover { border-color: rgba(255,255,255,.4); color: #fff; }
-.hud button:disabled { opacity: .3; cursor: default; }
-.hud-note { position: absolute; right: 16px; bottom: 52px; background: #000; padding: 8px 12px; border-radius: 4px; text-transform: none; }
+.hud-btns { display: flex; gap: 6px; opacity: 0; transition: opacity .15s; }
+.hud:hover .hud-btns, .hud:focus-within .hud-btns { opacity: 1; }
+.hud button { padding: 6px 10px; border: 1px solid rgba(255,255,255,.3); border-radius: 5px; background: rgba(0,0,0,.5); cursor: pointer; font: inherit; }
+.hud button:disabled { opacity: .35; cursor: default; }
+.hud-note { position: absolute; left: 16px; bottom: 44px; padding: 8px 12px; border-radius: 4px; background: #000; color: #fff; }
 
 /* -------------------------------------------------------------- overview */
-.ov { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.7); backdrop-filter: blur(6px); display: grid; place-items: center; }
-.ov-panel { width: min(1100px, 94vw); max-height: 90vh; overflow: auto; background: #0b0b10; border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: 24px 28px; font-family: var(--fz-body); }
+.ov { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.72); backdrop-filter: blur(6px); display: grid; place-items: center; }
+.ov-panel { width: min(1100px, 94vw); max-height: 92vh; overflow: auto; padding: 24px 28px; border-radius: 12px; background: #120A0E; border: 1px solid rgba(255,255,255,.14); color: var(--cz-white); }
 .ov-head { display: flex; justify-content: space-between; align-items: center; }
-.ov-head h2 { margin: 0; font: 600 14px/1 var(--cz-mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.6); }
-.ov-head button, .ov-cols button { background: none; border: 1px solid rgba(255,255,255,.14); border-radius: 6px; cursor: pointer; }
-.ov-head button { padding: 6px 10px; font-size: 13px; }
-.ov-cols { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; margin-top: 18px; }
-.ov-cols ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.ov-cols button { width: 100%; text-align: left; display: flex; gap: 12px; align-items: center; padding: 9px 12px; font-size: 15px; }
-.ov-cols button small { display: block; font: 500 10px/1.4 var(--cz-mono); letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.45); }
-.ov-cols button[data-world="casino"] .ov-n { color: var(--cz-red-bright); font-family: var(--cz-serif); font-style: italic; font-size: 22px; }
-.ov-cols button[data-world="festival"] .ov-n { color: var(--fz-lime); font-family: var(--fz-display); font-size: 24px; }
-.ov-n { min-width: 34px; }
-.ov-cols button[aria-current="true"] { border-color: var(--fz-lime); background: rgba(246,206,40,.06); }
-.ov-cols button:hover { border-color: rgba(255,255,255,.45); }
-.ov-keys { margin: 18px 0 0; font: 12px/1.4 var(--cz-mono); color: rgba(255,255,255,.45); }
+.ov-head h2 { margin: 0; font-size: 20px; font-weight: 650; }
+.ov-head button, .ov-cols button { background: none; border: 1px solid rgba(255,255,255,.16); border-radius: 6px; cursor: pointer; }
+.ov-head button { padding: 6px 10px; font-size: 14px; }
+.ov-cols { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; margin-top: 16px; }
+.ov-cols ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; align-content: start; }
+.ov-cols button { width: 100%; display: flex; gap: 12px; align-items: center; padding: 7px 12px; text-align: left; font-size: 14px; line-height: 1.25; }
+.ov-n { min-width: 26px; font-weight: 700; color: var(--cz-gold); }
+.ov-cols button:hover { border-color: rgba(255,255,255,.5); }
+.ov-cols button[aria-current="true"] { background: rgba(246,206,40,.08); border-color: var(--fz-lime); }
+.ov-keys { margin: 14px 0 0; font-size: 13px; color: var(--cz-gray); }
 
-/* ------------------------------------------------- claims & placeholders */
-mark.ph {
-  background: none; color: inherit; border: 1.5px dashed currentColor; border-radius: 4px; padding: 0 .3em;
-  font-style: normal; opacity: .85; box-decoration-break: clone; -webkit-box-decoration-break: clone;
-}
-mark.ph[data-kind="add"] { color: #ffb38a; }
-mark.ph[data-kind="confirm"] { color: #8fd8ff; }
-.claim-tag { display: inline-block; margin-right: .5em; padding: .1em .45em; border-radius: 3px; font: 600 .62em/1.4 var(--cz-mono); letter-spacing: .1em; text-transform: uppercase; vertical-align: .15em; background: rgba(255,255,255,.08); color: rgba(255,255,255,.65); }
-.claim[data-status="hypothesis"] .claim-tag { background: rgba(143,216,255,.12); color: #8fd8ff; }
-.claim[data-status="retrospective"] .claim-tag { background: rgba(246,206,40,.12); color: var(--fz-lime); }
+/* ------------------------------------------------- claims & review tags */
+mark.ph { display: inline-block; margin-left: .35em; padding: 0 .5em; border: 1px dashed currentColor; border-radius: 999px; background: none; color: #F3D9A0; font: 500 13px/1.5 var(--cz-mono); font-style: normal; vertical-align: .12em; }
+.is-chosen mark.ph, .flow-out mark.ph, .jr-note mark.ph { color: #7A4B00; }
+mark.ph-full { padding: 0 .3em; border: 1px dashed currentColor; border-radius: 4px; background: none; color: #ffb38a; }
+mark.ph-full[data-kind="confirm"] { color: #8fd8ff; }
+.claim-tag { display: inline-block; margin-right: .5em; padding: 0 .45em; border-radius: 3px; background: rgba(255,255,255,.1); color: var(--mut); font: 500 13px/1.6 var(--cz-mono); vertical-align: .1em; }
 
 /* ------------------------------------------------------- entrance motion */
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-.stage-scene[data-anim="play"] .rv { animation: rise .55s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i, 0) * 80ms + 80ms); }
-.deck.reduced .stage-scene .rv { animation: none !important; }
-.deck.reduced .stage-scene { animation: fade .25s both; }
-@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-
+.stage-scene[data-anim="play"] .rv { animation: rise .5s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i, 0) * 70ms); }
+/* the riskiest card and the fan keep their rotation through entrance */
+.deck.reduced .stage-scene .rv, .deck.reduced .op-card, .deck.reduced .dc-chip .cz-chip { animation: none !important; }
+.deck.reduced .bd-casino-glow, .static .bd-casino-glow { animation: none; }
 @media (prefers-reduced-motion: reduce) {
-  .stage-scene[data-anim="play"] .rv { animation-duration: .01ms; }
+  .stage-scene .rv, .op-card, .dc-chip .cz-chip, .bd-casino-glow { animation: none !important; }
 }
-
-/* ------------------------------------------------ calm placeholders */
-mark.ph { display: inline-block; padding: .05em .55em; border-width: 1px; border-radius: 999px; font: 600 .55em/1.5 var(--cz-mono); letter-spacing: .14em; text-transform: uppercase; vertical-align: .25em; opacity: .7; }
-.ph-draft { font-style: italic; opacity: .9; }
-.ph-draft sup { margin-left: .35em; font: 600 .42em/1 var(--cz-mono); letter-spacing: .14em; text-transform: uppercase; font-style: normal; color: #8fd8ff; opacity: .8; }
-.doc mark.ph, .presenter mark.ph { font: inherit; text-transform: none; letter-spacing: 0; vertical-align: baseline; }
-mark.ph-full { background: none; color: #ffb38a; border: 1px dashed currentColor; border-radius: 4px; padding: 0 .3em; }
-mark.ph-full[data-kind="confirm"] { color: #8fd8ff; }
-
-/* ------------------------------------------------ decluttered slides */
-/* Status badges live in the appendix; slides stay clean. */
-.scene:not(.l-appendix) .claim-tag { display: none; }
-/* Secondary detail moved to speaker notes. */
-.ev-methods, .jr-cons, .dc-crit, .dc-frame, .funnel-missing, .ap-nav, .ch-st, .jr-d, .tl-detail { display: none !important; }
-/* Decoration only frames the opening and the turn. */
-.deck:not([data-layout="opening"]):not([data-layout="turn"]) .bd-chip,
-.deck:not([data-layout="opening"]) .bd-suit,
-.scrolly .bd-chip, .scrolly .bd-suit { display: none; }
-.tag-hudl { opacity: .6; }
-
-/* Center each composition instead of pinning footers to the bottom edge. */
-.scene:not(.l-opening):not(.l-turn):not(.l-closing):not(.l-appendix) { justify-content: center; padding-top: 40px; padding-bottom: 70px; }
-.scene .jr-foot, .scene .ev-limits, .scene .hy-risk, .scene .dc-foot, .scene .rs-open, .scene .rf-next { margin-top: 56px !important; }
-.scene .hy-card { min-height: 0; }
-.scene .hy-body { padding: 64px 40px 56px; }
-.jr-foot { border-top: 0; padding-top: 0; }
-/* Controls stay out of the picture until you reach for them. */
-.hud { opacity: 0; }
-.hud:hover, .hud:focus-within { opacity: 1; }

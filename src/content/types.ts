@@ -2,9 +2,8 @@
  * Content model for the deck. Every substantive claim carries a status so
  * verified history, hypotheses, hindsight, and gaps never blur together.
  *
- * Placeholders are written inline as `[CONFIRM: ...]` or `[ADD: ...]`.
- * They render as dashed editorial chips and are counted by the
- * completeness report (?view=report).
+ * Unverified wording carries an inline `[CONFIRM: note]` or `[ADD: note]`.
+ * These render as small tags on the slide and are listed at ?view=report.
  */
 
 export type ClaimStatus =
@@ -31,8 +30,6 @@ export type Metric = {
   definition: string;
   value?: number;
   unit?: string;
-  numerator?: number;
-  denominator?: number;
   cohort?: string;
   source?: string;
   status: MetricStatus;
@@ -41,8 +38,12 @@ export type Metric = {
 export type Notes = {
   /** The one thing the room must remember from this scene. */
   keyPoint: string;
-  /** Suggested narration — speak it, don't read it. */
+  /** Suggested explanation. Edit into your own voice. */
   narration: string;
+  /** Line that hands off to the next slide. */
+  transition?: string;
+  /** Evidence limit to keep in mind while speaking. */
+  caveat?: string;
   followUps: { q: string; a: string }[];
 };
 
@@ -50,71 +51,40 @@ type SceneBase = {
   id: string;
   chapter: string;
   world: World;
-  /** Short headline shown on screen. */
+  /** The PM activity this scene demonstrates. */
+  lens: string;
+  /** Assertion headline shown on screen. */
   title: string;
-  /** The takeaway sentence. */
-  takeaway: string;
+  /** Optional single takeaway under the headline. */
+  takeaway?: string;
   /** Planned speaking time in seconds. */
   seconds: number;
   notes: Notes;
   sources: string[];
 };
 
-export type JourneyStep = { label: string; detail: string; friction?: Claim };
-export type EvidenceRow = { evidence: Claim; insight: Claim; decision: Claim };
-export type Hypothesis = { suit: "♠" | "♥" | "♦" | "♣"; belief: Claim; success: Claim };
-export type Option = {
-  name: string;
-  summary: string;
-  chosen?: boolean;
-  why: Claim;
-  /** Qualitative criteria: label → short assessment. */
-  criteria: { label: string; value: string }[];
-};
-export type Milestone = { date: string; label: string; detail?: Claim; mine?: boolean };
-export type Change = { learning: Claim; change: Claim; effect: Claim; tradeoff?: Claim };
+export type JourneyStep = { label: string; system: string; note?: Claim; kind?: "Observed" | "Hypothesis" };
+export type EvidenceRow = { signal: Claim; meaning: Claim; decision: Claim };
+export type Hypothesis = { suit: "♠" | "♥" | "♦" | "♣"; belief: Claim; because: Claim; expected: Claim; riskiest?: boolean };
+export type Option = { name: string; summary: string; chosen?: boolean; values: string[] };
+export type Milestone = { date: string; label: string; late?: boolean };
+export type Change = { name: string; learning: Claim; decision: Claim; expected: Claim; tradeoff: Claim };
 export type Reflection = { title: string; happened: Claim; learned: Claim; instead: Claim };
 
 export type Scene =
-  | (SceneBase & {
-      layout: "opening";
-      kicker: string;
-      outcome: Claim;
-      facts: Claim[];
-    })
-  | (SceneBase & {
-      layout: "journey";
-      user: Claim;
-      steps: JourneyStep[];
-      role: Claim;
-      constraints: Claim[];
-    })
+  | (SceneBase & { layout: "opening"; subtitle: string; kicker: string; releases: { name: string; identity: string; facts: string[] }[] })
+  | (SceneBase & { layout: "journey"; user: Claim; role: Claim; steps: JourneyStep[] })
   | (SceneBase & { layout: "evidence"; methods: Claim[]; rows: EvidenceRow[]; limits: Claim })
-  | (SceneBase & {
-      layout: "hypotheses";
-      outcome: Claim;
-      cards: Hypothesis[];
-      riskiest: Claim;
-    })
-  | (SceneBase & { layout: "decision"; question: string; options: Option[]; downside: Claim; framing: Claim })
-  | (SceneBase & { layout: "timeline"; milestones: Milestone[]; artifact: { caption: Claim; lines: string[] } })
-  | (SceneBase & {
-      layout: "results";
-      metrics: Metric[];
-      worked: Claim[];
-      didnt: Claim[];
-      unresolved: Claim;
-    })
+  | (SceneBase & { layout: "hypotheses"; outcome: Claim; cards: Hypothesis[]; framing: Claim })
+  | (SceneBase & { layout: "decision"; criteria: string[]; options: Option[]; downside: Claim; framing: Claim })
+  | (SceneBase & { layout: "timeline"; milestones: Milestone[]; challenge: Claim; why: Claim; learned: Claim; owners: Claim })
+  | (SceneBase & { layout: "results"; metrics: Metric[]; worked: Claim; didnt: Claim; carried: Claim })
   | (SceneBase & { layout: "turn"; learning: Claim })
   | (SceneBase & { layout: "changes"; changes: Change[] })
-  | (SceneBase & {
-      layout: "rollout";
-      milestones: Milestone[];
-      metrics: Metric[];
-      scope: Claim;
-    })
-  | (SceneBase & { layout: "reflection"; reflections: Reflection[]; nextTest: Claim })
-  | (SceneBase & { layout: "closing"; outcome: Claim; contribution: Claim; lesson: Claim });
+  | (SceneBase & { layout: "product"; shots: { src: string; alt: string; name: string; caption: string; credit: string }[] })
+  | (SceneBase & { layout: "rollout"; days: { date: string; count: number }[]; window: { from: string; to: string; label: string }; stats: { value: string; label: string; source: string }[]; scope: Claim; cannot: Claim })
+  | (SceneBase & { layout: "reflection"; reflections: Reflection[] })
+  | (SceneBase & { layout: "closing"; lesson: string; principles: { name: string; detail: string }[] });
 
 export type AppendixItem = {
   id: string;
