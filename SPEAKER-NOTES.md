@@ -33,19 +33,20 @@ Planned time: 14:30, leaving about a minute of buffer in the 15-minute slot.
 **Likely follow-ups:**
 - Why call a hackathon a product? It has users, a journey with drop-off risk at each step, and systems we designed and changed between versions.
 
-## 2. The journey crossed too many systems (1:30)
+## 2. GSU had a CS program, but no CS community (1:30)
 
-**Main point:** The primary user is the student builder. I owned the end-to-end experience, and I did not write the site code.
+**Main point:** I found the problem by asking around as a transfer: the CS degree had no extracurricular layer, and that costs students careers.
 
-**Suggested explanation:** Our primary user is a student who is curious but hasn't committed. To get from curious to on campus, a student moved through a landing page, a Tally form, a separate login, a status page, and a team matcher. The two highlighted stages are where I'd look first. The seam at Apply is a fact about what we built. The drop-off after acceptance is a hypothesis, and I'll be careful about that. My job was the whole path. Joey, Poorav, Liam, and Arhaan built the site. I decided what it needed to do.
+**Suggested explanation:** I transferred to Georgia State from community college, and I kept asking the people I met the same question: where do CS students actually build things together? The answer was nowhere. Women in Tech, Girls Who Code, ColorStack, NSBE, even the Computer Science Club all existed on paper, and none of them were running events. [ADD: roughly how many people you asked.] Meanwhile Georgia Tech, Emory, and Kennesaw State, all nearby, have hackathons and active communities, and their students show up to recruiting with projects and networks. That's a career gap, not just a social one. So a group of friends and I founded PROGSU to fill it. [ADD: founding date, founders, members today; GSU CS enrollment.] Hacklanta is the flagship product that came out of that.
 
-**Transition:** After the event, we went and asked where this broke down.
+**Transition:** Before we built anything, we had to figure out what students actually needed.
 
-**Caveat:** Friction at Apply is a fact about the design. Whether it cost us applicants is unconfirmed.
+**Caveat:** Club inactivity is from my own asking around, not a formal audit. Say that if asked.
 
 **Likely follow-ups:**
-- How did you know this was the right problem? [ADD: the specific signal in your own words]
-- What did you personally own? Direction, participant experience requirements, ops and volunteer scheduling, sponsors and growth. Engineering: Joey Zhang, Poorav Rawat, Liam Ellison, Arhaan Keshwani (commit authors).
+- How did you know this was the right problem? I asked repeatedly as a transfer, across many people, and got the same answer: no active clubs, no events. [ADD: count]
+- Why not revive an existing club instead? [ADD: your answer]
+- What did you personally own? Co-founded PROGSU. On Hacklanta: direction, participant experience, ops and volunteer scheduling, sponsors and growth. The PROGSU engineering team built the site.
 
 ## 3. What we heard changed what we built (1:20)
 

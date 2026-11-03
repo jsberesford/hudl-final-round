@@ -63,9 +63,10 @@ type SceneBase = {
   sources: string[];
 };
 
-export type JourneyStep = { label: string; system: string; note?: Claim; kind?: "Observed" | "Hypothesis" };
 export type EvidenceRow = { signal: Claim; meaning: Claim; decision: Claim };
-export type Hypothesis = { suit: "♠" | "♥" | "♦" | "♣"; belief: Claim; because: Claim; expected: Claim; riskiest?: boolean };
+export type Hypothesis = { suit: "♠" | "♥" | "♦" | "♣"; belief: Claim; because: Claim; expected: Claim; result?: { value: string; label: string }; riskiest?: boolean };
+export type MatrixCall = "do" | "later" | "cut" | "optional";
+export type MatrixPoint = { name: string; effort: number; impact: number; call: MatrixCall; tag?: string };
 export type Option = { name: string; summary: string; chosen?: boolean; values: string[] };
 export type Milestone = { date: string; label: string; late?: boolean };
 export type Change = { name: string; learning: Claim; decision: Claim; expected: Claim; tradeoff: Claim };
@@ -73,15 +74,22 @@ export type Reflection = { title: string; happened: Claim; learned: Claim; inste
 
 export type Scene =
   | (SceneBase & { layout: "opening"; subtitle: string; kicker: string; releases: { name: string; identity: string; facts: string[] }[] })
-  | (SceneBase & { layout: "journey"; user: Claim; role: Claim; steps: JourneyStep[] })
+  | (SceneBase & { layout: "gap"; clubs: string[]; dormant: Claim; answer: { name: string; note: Claim }; compare: { school: string; offer: Claim; empty?: boolean }[]; user: Claim; impact: Claim })
+  | (SceneBase & { layout: "goals"; mission: Claim; pillars: { name: string; detail: Claim; items: string[] }[]; results: { value: string; label: Claim }[] })
+  | (SceneBase & { layout: "research"; rows: { method: string; who: string; heard: Claim; built: Claim }[]; limits: Claim })
+  | (SceneBase & { layout: "stories"; stories: { area: string; name: string; problem: Claim; how: Claim; result: Claim }[]; framing: Claim })
+  | (SceneBase & { layout: "monitor"; groups: { area: string; question: string; metrics: { name: string; def: string; value?: string }[] }[]; loop: Claim })
+  | (SceneBase & { layout: "stats"; hero: { value: string; label: string }; stats: { value: string; label: string }[]; note: Claim })
+  | (SceneBase & { layout: "now"; clubs: { name: string; status: string }[]; answer: { name: string; status: string }; stats: { value: string; label: string }[]; companies: string[]; line: Claim })
   | (SceneBase & { layout: "evidence"; methods: Claim[]; rows: EvidenceRow[]; limits: Claim })
   | (SceneBase & { layout: "hypotheses"; outcome: Claim; cards: Hypothesis[]; framing: Claim })
+  | (SceneBase & { layout: "matrix"; points: MatrixPoint[]; rule: Claim; framing: Claim })
   | (SceneBase & { layout: "decision"; criteria: string[]; options: Option[]; downside: Claim; framing: Claim })
   | (SceneBase & { layout: "timeline"; milestones: Milestone[]; challenge: Claim; why: Claim; learned: Claim; owners: Claim })
   | (SceneBase & { layout: "results"; metrics: Metric[]; worked: Claim; didnt: Claim; carried: Claim })
   | (SceneBase & { layout: "turn"; learning: Claim })
   | (SceneBase & { layout: "changes"; changes: Change[] })
-  | (SceneBase & { layout: "product"; shots: { src: string; alt: string; name: string; caption: string; credit: string }[] })
+  | (SceneBase & { layout: "product"; shots: { src: string; alt: string; name: string; caption: string; credit: string }[]; deltas?: { from: string; to: string; label: string }[] })
   | (SceneBase & { layout: "rollout"; days: { date: string; count: number }[]; window: { from: string; to: string; label: string }; stats: { value: string; label: string; source: string }[]; scope: Claim; cannot: Claim })
   | (SceneBase & { layout: "reflection"; reflections: Reflection[] })
   | (SceneBase & { layout: "closing"; lesson: string; principles: { name: string; detail: string }[] });

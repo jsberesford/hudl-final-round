@@ -1,7 +1,7 @@
 // Screenshot every scene: node scripts/shoot-all.mjs <baseUrl> <outDir> [w] [h]
 import { chromium } from "playwright";
 const [base, out, w = "1440", h = "900"] = process.argv.slice(2);
-const ids = ["outcome","problem","research","hypotheses","prioritization","delivery","results-i","turn","changes","rollout-ii","differently","close","a-role","a-metrics"];
+const ids = ["outcome","problem","goal","hypotheses","prioritization","research","delivery","results-i","stats-i","turn","changes","product","rollout-ii","differently","now","close","a-role","a-metrics"];
 const b = await chromium.launch();
 const p = await b.newPage({ viewport: { width: +w, height: +h } });
 const errs = [];

@@ -71,32 +71,258 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
         </div>
       );
 
-    case "journey":
+    case "gap":
       return (
         <>
           <Head scene={scene} n={n} />
           <div className="sc-body">
-            <ol className="jr rv" style={i(1)}>
-              {scene.steps.map((s) => (
-                <li key={s.label} className={s.note ? "is-friction" : ""}>
-                  <span className="jr-node" aria-hidden="true" />
-                  <b>{s.label}</b>
-                  <span className="jr-sys">{s.system}</span>
-                  {s.note && (
-                    <span className="jr-note">
-                      <span className="jr-kind">
-                        <i aria-hidden="true">♦</i> {s.kind}
-                      </span>
-                      <ClaimText claim={s.note} />
-                    </span>
-                  )}
+            <div className="gp">
+              <div className="gp-roster rv" style={i(1)}>
+                <span className="pm-k">What I found as a transfer</span>
+                <ul>
+                  {scene.clubs.map((c) => (
+                    <li key={c}>
+                      <span>{c}</span>
+                      <em>No events</em>
+                    </li>
+                  ))}
+                  <li className="gp-answer">
+                    <span>{scene.answer.name}</span>
+                    <em>Founded</em>
+                  </li>
+                </ul>
+                <p className="pm-source">
+                  <ClaimText claim={scene.dormant} />
+                </p>
+              </div>
+              <div className="gp-atl rv" style={i(2)}>
+                <span className="pm-k">Across Atlanta</span>
+                <dl>
+                  {scene.compare.map((c) => (
+                    <div key={c.school} className={c.empty ? "is-empty" : ""}>
+                      <dt>{c.school}</dt>
+                      <dd>
+                        <ClaimText claim={c.offer} />
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                <p className="pm-source">
+                  <ClaimText claim={scene.answer.note} />
+                </p>
+              </div>
+            </div>
+            <div className="pm-pair rv" style={i(3)}>
+              <Block label="Primary user" claim={scene.user} />
+              <Block label="Why it matters" claim={scene.impact} />
+            </div>
+          </div>
+        </>
+      );
+
+    case "goals":
+      return (
+        <>
+          <Head scene={scene} n={n} />
+          <div className="sc-body">
+            <div className="gl">
+              <div className="gl-left">
+                <p className="gl-mission rv" style={i(1)}>
+                  <ClaimText claim={scene.mission} />
+                </p>
+                <dl className="gl-proof rv" style={i(3)}>
+                  {scene.results.map((r) => (
+                    <div key={r.value}>
+                      <dt>{r.value}</dt>
+                      <dd>
+                        <ClaimText claim={r.label} />
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+              <div className="gl-how rv" style={i(2)}>
+                <span className="pm-k">How we went after it</span>
+                <ol>
+                  {scene.pillars.map((p, k) => (
+                    <li key={p.name}>
+                      <span className="gl-n">{k + 1}</span>
+                      <div>
+                        <h3>{p.name}</h3>
+                        <p>{p.items.join(" · ")}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+
+    case "research":
+      return (
+        <>
+          <Head scene={scene} n={n} />
+          <div className="sc-body">
+            <div className="rs rv" style={i(1)}>
+              <div className="rs-row rs-head">
+                <span>Who we asked</span>
+                <span>What we heard</span>
+                <span>What we built</span>
+              </div>
+              {scene.rows.map((row) => (
+                <div key={row.method} className="rs-row">
+                  <div className="rs-who">
+                    <b>{row.method}</b>
+                    <small>{row.who}</small>
+                  </div>
+                  <p className="rs-heard">
+                    <ClaimText claim={row.heard} />
+                  </p>
+                  <p className="rs-built">
+                    <ClaimText claim={row.built} />
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p className="pm-source rv" style={i(2)}>
+              <ClaimText claim={scene.limits} />
+            </p>
+          </div>
+        </>
+      );
+
+    case "stories":
+      return (
+        <>
+          <Head scene={scene} n={n} />
+          <div className="sc-body">
+            <ol className="st">
+              {scene.stories.map((st, k) => (
+                <li key={st.name} className="rv" style={i(1 + k)}>
+                  <span className="st-area">{st.area}</span>
+                  <h3>{st.name}</h3>
+                  <p className="st-problem">
+                    <ClaimText claim={st.problem} />
+                  </p>
+                  <p className="st-how">
+                    <ClaimText claim={st.how} />
+                  </p>
+                  <p className="st-result">
+                    <ClaimText claim={st.result} />
+                  </p>
                 </li>
               ))}
             </ol>
-            <div className="pm-pair rv" style={i(2)}>
-              <Block label="Primary user" claim={scene.user} />
-              <Block label="What I owned" claim={scene.role} />
+            <p className="pm-source rv" style={i(4)}>
+              <ClaimText claim={scene.framing} />
+            </p>
+          </div>
+        </>
+      );
+
+    case "monitor":
+      return (
+        <>
+          <Head scene={scene} n={n} />
+          <div className="sc-body">
+            <ol className="mo">
+              {scene.groups.map((g, k) => (
+                <li key={g.area} className="rv" style={i(1 + k)}>
+                  <span className="mo-area">{g.area}</span>
+                  <h3>{g.question}</h3>
+                  <dl>
+                    {g.metrics.map((m) => (
+                      <div key={m.name}>
+                        <dt>
+                          {m.name}
+                          {m.value && <b>{m.value}</b>}
+                        </dt>
+                        <dd>{m.def}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </li>
+              ))}
+            </ol>
+            <p className="mo-loop rv" style={i(4)}>
+              <span aria-hidden="true">↻</span>
+              <ClaimText claim={scene.loop} />
+            </p>
+          </div>
+        </>
+      );
+
+    case "stats":
+      return (
+        <>
+          <Head scene={scene} n={n} />
+          <div className="sc-body">
+            <div className="sx">
+              <div className="sx-hero rv" style={i(1)}>
+                <b>{scene.hero.value}</b>
+                <span>{scene.hero.label}</span>
+              </div>
+              <dl className="sx-grid rv" style={i(2)}>
+                {scene.stats.map((st) => (
+                  <div key={st.label}>
+                    <dt>{st.value}</dt>
+                    <dd>{st.label}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
+            <p className="pm-source rv" style={i(3)}>
+              <ClaimText claim={scene.note} />
+            </p>
+          </div>
+        </>
+      );
+
+    case "now":
+      return (
+        <>
+          <Head scene={scene} n={n} />
+          <div className="sc-body">
+            <div className="nw">
+              <div className="nw-list rv" style={i(1)}>
+                <span className="nw-k">The same list, one year later</span>
+                <ul>
+                  {scene.clubs.map((c) => (
+                    <li key={c.name}>
+                      <span>{c.name}</span>
+                      <em>{c.status}</em>
+                    </li>
+                  ))}
+                  <li className="nw-answer">
+                    <span>{scene.answer.name}</span>
+                    <em>{scene.answer.status}</em>
+                  </li>
+                </ul>
+              </div>
+              <div className="nw-right rv" style={i(2)}>
+                <dl className="nw-stats">
+                  {scene.stats.map((st) => (
+                    <div key={st.label}>
+                      <dt>{st.value}</dt>
+                      <dd>{st.label}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <div className="nw-co">
+                  <span className="nw-k">Offers from</span>
+                  <ul>
+                    {scene.companies.map((c) => (
+                      <li key={c}>{c}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <p className="nw-line rv" style={i(3)}>
+              <ClaimText claim={scene.line} />
+            </p>
           </div>
         </>
       );
@@ -144,21 +370,29 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
           <Head scene={scene} n={n} />
           <div className="sc-body">
             <p className="hy-goal rv" style={i(1)}>
-              <span className="pm-k">Desired user outcome</span>
+              <span className="pm-k">What we needed to be true</span>
               <ClaimText claim={scene.outcome} />
             </p>
             <div className="hy">
               {scene.cards.map((c, k) => (
-                <div key={k} className={`hy-deal rv ${c.riskiest ? "is-risk" : ""}`} style={{ ...i(2 + k), ["--rot" as string]: `${(k - 1) * 0.8}deg` }}>
+                <div key={k} className={`hy-deal rv ${c.riskiest ? "is-risk" : ""}`} style={{ ...i(2 + k), ["--rot" as string]: `${(k - (scene.cards.length - 1) / 2) * 0.8}deg` }}>
                   <CardFront rank={String(k + 1)} suit={c.suit} className="hy-card">
                     <div className="hy-body">
                       <p className="hy-belief">
-                        We believed <ClaimText claim={c.belief} />, because <ClaimText claim={c.because} />.
+                        <ClaimText claim={c.belief} />
+                      </p>
+                      <p className="hy-why">
+                        <ClaimText claim={c.because} />
                       </p>
                       <p className="hy-check">
-                        <span>{c.riskiest ? "Riskiest bet, in hindsight. Would show as:" : "Would show as:"}</span>
+                        <span>{c.riskiest ? "Riskiest · Proof" : "Proof"}</span>
                         <ClaimText claim={c.expected} />
                       </p>
+                      {c.result && (
+                        <p className="hy-result">
+                          <b>{c.result.value}</b> {c.result.label}
+                        </p>
+                      )}
                     </div>
                   </CardFront>
                   {c.riskiest && (
@@ -169,12 +403,62 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
                 </div>
               ))}
             </div>
-            <p className="pm-source rv" style={i(5)}>
+            <p className="pm-source rv" style={i(6)}>
               <ClaimText claim={scene.framing} />
             </p>
           </div>
         </>
       );
+
+    case "matrix": {
+      const label = { do: "Did it", later: "Pushed to II", cut: "Cut", optional: "Optional" } as const;
+      return (
+        <>
+          <Head scene={scene} n={n} />
+          <div className="sc-body">
+            <div className="mx-wrap">
+              <div className="mx rv" style={i(1)}>
+                <span className="mx-axis mx-y">Impact →</span>
+                <span className="mx-axis mx-x">Effort →</span>
+                <div className="mx-grid">
+                  <span className="mx-q mx-q1">Quick wins</span>
+                  <span className="mx-q mx-q2">Big bets</span>
+                  <span className="mx-q mx-q3">Fill-ins</span>
+                  <span className="mx-q mx-q4">Money pits</span>
+                  {scene.points.map((p) => (
+                    <span key={p.name} className={`mx-pt is-${p.call}${p.effort > 0.7 ? " is-flip" : ""}`} style={{ left: `${p.effort * 100}%`, bottom: `${p.impact * 100}%` }}>
+                      <i aria-hidden="true" />
+                      <span>
+                        <b>{p.name}</b>
+                        {p.tag && <small>{p.tag}</small>}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="mx-side rv" style={i(2)}>
+                <ul className="mx-key">
+                  {(Object.keys(label) as (keyof typeof label)[]).map((c) => (
+                    <li key={c} className={`is-${c}`}>
+                      <i aria-hidden="true" />
+                      {label[c]}
+                      <span>{scene.points.filter((p) => p.call === c).length}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mx-rule">
+                  <span className="pm-k">The rule we followed</span>
+                  <ClaimText claim={scene.rule} />
+                </p>
+                <p className="pm-source">
+                  <ClaimText claim={scene.framing} />
+                </p>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    }
 
     case "decision":
       return (
@@ -306,6 +590,20 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
                 </figure>
               ))}
             </div>
+            {scene.deltas && (
+              <dl className="pd-deltas rv" style={i(3)}>
+                {scene.deltas.map((d) => (
+                  <div key={d.label}>
+                    <dt>
+                      <s>{d.from}</s>
+                      <span aria-hidden="true">→</span>
+                      <b>{d.to}</b>
+                    </dt>
+                    <dd>{d.label}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
           </div>
         </>
       );
@@ -330,7 +628,7 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
                   </li>
                 ))}
               </ul>
-              <Block label="What this cannot establish" claim={scene.cannot} className="ro-limit" />
+              <Block label="What I'd test next" claim={scene.cannot} className="ro-limit" />
             </div>
           </div>
         </>
@@ -342,17 +640,21 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
           <Head scene={scene} n={n} />
           <div className="sc-body">
             <ol className="rf">
+              <li className="rf-head" aria-hidden="true">
+                <span />
+                <span>What happened</span>
+                <span>Next time</span>
+              </li>
               {scene.reflections.map((x, k) => (
                 <li key={x.title} className="rv" style={i(1 + k)}>
-                  <h3>{x.title}</h3>
+                  <h3>
+                    <span className="rf-n">{k + 1}</span>
+                    {x.title}
+                  </h3>
                   <p>
                     <ClaimText claim={x.happened} />
                   </p>
-                  <p>
-                    <ClaimText claim={x.learned} />
-                  </p>
                   <p className="rf-now">
-                    <span className="pm-k">Next time</span>
                     <ClaimText claim={x.instead} />
                   </p>
                 </li>
@@ -389,7 +691,12 @@ function Body({ scene, n }: { scene: Scene; n: number }) {
             </p>
           </div>
           <div className="cl-art rv" style={i(1)} aria-hidden="true">
-            <CardFront rank="I" suit="♥" className="cl-card" />
+            <CardFront rank="I" suit="♥" className="cl-card">
+              <div className="cl-card-face">
+                <span className="cl-card-word">Hacklanta</span>
+                <span className="cl-card-sub">I · Mar 28</span>
+              </div>
+            </CardFront>
             <div className="cl-pass">
               <Pass strap={false}>
                 <PassFace />

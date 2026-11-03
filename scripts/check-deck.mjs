@@ -15,7 +15,7 @@ const page = async (opts = {}) => {
 };
 const hash = (p) => p.evaluate(() => location.hash);
 const wait = (p, ms) => p.waitForTimeout(ms);
-const MAIN = ["outcome","problem","research","hypotheses","prioritization","delivery","results-i","turn","changes","product","rollout-ii","differently","close"];
+const MAIN = ["outcome","problem","goal","hypotheses","prioritization","research","delivery","results-i","stats-i","turn","changes","product","rollout-ii","differently","now","close"];
 const APPX = ["a-role","a-research","a-priorities","a-metrics","a-rollout","a-delta","a-next"];
 
 // Every element must sit inside the stage and clear the HUD; no text may be clipped by its box.
